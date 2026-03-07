@@ -236,11 +236,15 @@ export class ProfileSelectScene extends Phaser.Scene {
         .setOrigin(0.5)
     );
 
-    // Phaser display text (mirrors HTML input)
+    // Input center position in game coordinates
     const boxY = py + 75;
     const boxH = 44;
+    const inputCenterX = width / 2;
+    const inputCenterY = boxY + boxH / 2;
+
+    // Phaser display text (mirrors HTML input, hidden behind HTML input)
     this.inputText = this.add
-      .text(width / 2, boxY + boxH / 2, "", {
+      .text(inputCenterX, inputCenterY, "", {
         fontSize: "24px",
         color: "#ffffff",
         fontFamily: "Arial",
@@ -249,8 +253,11 @@ export class ProfileSelectScene extends Phaser.Scene {
       .setOrigin(0.5);
     this.inputElements.push(this.inputText);
 
-    // HTML input for mobile keyboard support
+    // HTML input for mobile keyboard support — positioned over game coordinates
     this.htmlInput = createMobileInput(
+      this,
+      inputCenterX,
+      inputCenterY,
       (value) => {
         this.inputName = value;
         this.inputText?.setText(value);

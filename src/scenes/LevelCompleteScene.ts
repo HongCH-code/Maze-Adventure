@@ -94,11 +94,15 @@ export class LevelCompleteScene extends Phaser.Scene {
         .setOrigin(0.5)
     );
 
-    // Phaser display text (mirrors HTML input)
+    // Input center position in game coordinates
     const boxY = height * 0.52;
     const boxH = 50;
+    const inputCenterX = width / 2;
+    const inputCenterY = boxY + boxH / 2;
+
+    // Phaser display text (mirrors HTML input)
     this.nameText = this.add
-      .text(width / 2, boxY + boxH / 2, "", {
+      .text(inputCenterX, inputCenterY, "", {
         fontSize: "26px",
         color: "#ffffff",
         fontFamily: "Arial",
@@ -107,8 +111,11 @@ export class LevelCompleteScene extends Phaser.Scene {
       .setOrigin(0.5);
     this.overlayElements.push(this.nameText);
 
-    // HTML input for mobile keyboard support
+    // HTML input for mobile keyboard support — positioned over game coordinates
     this.htmlInput = createMobileInput(
+      this,
+      inputCenterX,
+      inputCenterY,
       (value) => {
         this.playerName = value;
         this.nameText?.setText(value);
