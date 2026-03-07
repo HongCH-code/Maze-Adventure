@@ -3,6 +3,7 @@ import {
   LeaderboardManager,
   LeaderboardEntry,
 } from "../systems/LeaderboardManager";
+import { createMobileInput, removeMobileInput } from "../systems/MobileInput";
 
 interface LevelCompleteData {
   level: number;
@@ -21,6 +22,7 @@ export class LevelCompleteScene extends Phaser.Scene {
   private nameInputActive = false;
   private overlayElements: Phaser.GameObjects.GameObject[] = [];
   private newEntryRank = -1;
+  private htmlInput: HTMLInputElement | null = null;
 
   constructor() {
     super({ key: "LevelCompleteScene" });
@@ -32,6 +34,7 @@ export class LevelCompleteScene extends Phaser.Scene {
     this.nameInputActive = false;
     this.overlayElements = [];
     this.newEntryRank = -1;
+    this.htmlInput = null;
   }
 
   create(): void {
@@ -91,20 +94,11 @@ export class LevelCompleteScene extends Phaser.Scene {
         .setOrigin(0.5)
     );
 
-    // Input box
-    const boxW = 300;
-    const boxH = 50;
-    const boxX = (width - boxW) / 2;
+    // Phaser display text (mirrors HTML input)
     const boxY = height * 0.52;
-    const inputBox = this.add.graphics();
-    inputBox.fillStyle(0x333355, 1);
-    inputBox.fillRoundedRect(boxX, boxY, boxW, boxH, 8);
-    inputBox.lineStyle(2, 0x4a90d9, 1);
-    inputBox.strokeRoundedRect(boxX, boxY, boxW, boxH, 8);
-    this.overlayElements.push(inputBox);
-
+    const boxH = 50;
     this.nameText = this.add
-      .text(width / 2, boxY + boxH / 2, "|", {
+      .text(width / 2, boxY + boxH / 2, "", {
         fontSize: "26px",
         color: "#ffffff",
         fontFamily: "Arial",
@@ -113,18 +107,14 @@ export class LevelCompleteScene extends Phaser.Scene {
       .setOrigin(0.5);
     this.overlayElements.push(this.nameText);
 
-    // Blinking cursor
-    this.time.addEvent({
-      delay: 500,
-      loop: true,
-      callback: () => {
-        if (!this.nameInputActive || !this.nameText) return;
-        const showCursor = !this.nameText.text.endsWith("|");
-        this.nameText.setText(
-          this.playerName + (showCursor ? "|" : " ")
-        );
+    // HTML input for mobile keyboard support
+    this.htmlInput = createMobileInput(
+      (value) => {
+        this.playerName = value;
+        this.nameText?.setText(value);
       },
-    });
+      () => this.confirmName()
+    );
 
     // Confirm button
     const confirmBtn = this.add
@@ -146,31 +136,6 @@ export class LevelCompleteScene extends Phaser.Scene {
     );
     confirmBtn.on("pointerdown", () => this.confirmName());
     this.overlayElements.push(confirmBtn);
-
-    // Keyboard input
-    if (this.input.keyboard) {
-      this.input.keyboard.on("keydown", this.handleKeyInput, this);
-    }
-  }
-
-  private handleKeyInput = (event: KeyboardEvent): void => {
-    if (!this.nameInputActive) return;
-
-    if (event.key === "Enter") {
-      this.confirmName();
-    } else if (event.key === "Backspace") {
-      this.playerName = this.playerName.slice(0, -1);
-      this.updateNameDisplay();
-    } else if (event.key.length === 1 && this.playerName.length < 8) {
-      this.playerName += event.key;
-      this.updateNameDisplay();
-    }
-  };
-
-  private updateNameDisplay(): void {
-    if (this.nameText) {
-      this.nameText.setText(this.playerName + "|");
-    }
   }
 
   private confirmName(): void {
@@ -178,9 +143,8 @@ export class LevelCompleteScene extends Phaser.Scene {
     const name = this.playerName.trim() || "玩家";
     this.nameInputActive = false;
 
-    if (this.input.keyboard) {
-      this.input.keyboard.off("keydown", this.handleKeyInput, this);
-    }
+    removeMobileInput(this.htmlInput);
+    this.htmlInput = null;
 
     const d = this.levelResult;
     this.newEntryRank = this.lb.addEntry(

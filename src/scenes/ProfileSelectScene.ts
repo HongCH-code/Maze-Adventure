@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { profileManager, UserProfile } from "../systems/ProfileManager";
+import { createMobileInput, removeMobileInput } from "../systems/MobileInput";
 
 export class ProfileSelectScene extends Phaser.Scene {
   private isNaming = false;
@@ -7,6 +8,7 @@ export class ProfileSelectScene extends Phaser.Scene {
   private inputName = "";
   private inputText?: Phaser.GameObjects.Text;
   private inputElements: Phaser.GameObjects.GameObject[] = [];
+  private htmlInput: HTMLInputElement | null = null;
 
   constructor() {
     super({ key: "ProfileSelectScene" });
@@ -16,6 +18,7 @@ export class ProfileSelectScene extends Phaser.Scene {
     this.isNaming = false;
     this.inputName = "";
     this.inputElements = [];
+    this.htmlInput = null;
 
     const { width, height } = this.cameras.main;
 
@@ -233,20 +236,11 @@ export class ProfileSelectScene extends Phaser.Scene {
         .setOrigin(0.5)
     );
 
-    // Input box
-    const boxW = 280;
-    const boxH = 44;
-    const boxX = (width - boxW) / 2;
+    // Phaser display text (mirrors HTML input)
     const boxY = py + 75;
-    const inputBox = this.add.graphics();
-    inputBox.fillStyle(0x333355, 1);
-    inputBox.fillRoundedRect(boxX, boxY, boxW, boxH, 8);
-    inputBox.lineStyle(2, 0x4a90d9, 1);
-    inputBox.strokeRoundedRect(boxX, boxY, boxW, boxH, 8);
-    this.inputElements.push(inputBox);
-
+    const boxH = 44;
     this.inputText = this.add
-      .text(width / 2, boxY + boxH / 2, "|", {
+      .text(width / 2, boxY + boxH / 2, "", {
         fontSize: "24px",
         color: "#ffffff",
         fontFamily: "Arial",
@@ -255,16 +249,14 @@ export class ProfileSelectScene extends Phaser.Scene {
       .setOrigin(0.5);
     this.inputElements.push(this.inputText);
 
-    // Blinking cursor
-    this.time.addEvent({
-      delay: 500,
-      loop: true,
-      callback: () => {
-        if (!this.isNaming || !this.inputText) return;
-        const showCursor = !this.inputText.text.endsWith("|");
-        this.inputText.setText(this.inputName + (showCursor ? "|" : " "));
+    // HTML input for mobile keyboard support
+    this.htmlInput = createMobileInput(
+      (value) => {
+        this.inputName = value;
+        this.inputText?.setText(value);
       },
-    });
+      () => this.confirmCreate()
+    );
 
     // Confirm button
     const confirmBtn = this.add
@@ -306,27 +298,7 @@ export class ProfileSelectScene extends Phaser.Scene {
     );
     cancelBtn.on("pointerdown", () => this.cancelCreate());
     this.inputElements.push(cancelBtn);
-
-    // Keyboard
-    if (this.input.keyboard) {
-      this.input.keyboard.on("keydown", this.handleKey, this);
-    }
   }
-
-  private handleKey = (event: KeyboardEvent): void => {
-    if (!this.isNaming) return;
-    if (event.key === "Enter") {
-      this.confirmCreate();
-    } else if (event.key === "Escape") {
-      this.cancelCreate();
-    } else if (event.key === "Backspace") {
-      this.inputName = this.inputName.slice(0, -1);
-      this.inputText?.setText(this.inputName + "|");
-    } else if (event.key.length === 1 && this.inputName.length < 8) {
-      this.inputName += event.key;
-      this.inputText?.setText(this.inputName + "|");
-    }
-  };
 
   private confirmCreate(): void {
     if (!this.isNaming) return;
@@ -344,9 +316,8 @@ export class ProfileSelectScene extends Phaser.Scene {
 
   private cleanupInput(): void {
     this.isNaming = false;
-    if (this.input.keyboard) {
-      this.input.keyboard.off("keydown", this.handleKey, this);
-    }
+    removeMobileInput(this.htmlInput);
+    this.htmlInput = null;
     this.inputElements.forEach((obj) => obj.destroy());
     this.inputElements = [];
     this.inputText = undefined;
