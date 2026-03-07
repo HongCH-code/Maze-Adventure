@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { BootScene } from "./scenes/BootScene";
+import { ProfileSelectScene } from "./scenes/ProfileSelectScene";
 import { TitleScene } from "./scenes/TitleScene";
 import { LevelSelectScene } from "./scenes/LevelSelectScene";
 import { GameScene } from "./scenes/GameScene";
@@ -19,6 +20,7 @@ const config: Phaser.Types.Core.GameConfig = {
   },
   scene: [
     BootScene,
+    ProfileSelectScene,
     TitleScene,
     LevelSelectScene,
     GameScene,

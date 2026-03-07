@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { profileManager } from "../systems/ProfileManager";
 
 export class TitleScene extends Phaser.Scene {
   constructor() {
@@ -7,10 +8,11 @@ export class TitleScene extends Phaser.Scene {
 
   create(): void {
     const { width, height } = this.cameras.main;
+    const profile = profileManager.getActiveProfile();
 
     // Title
     this.add
-      .text(width / 2, height * 0.25, "迷宮大冒險", {
+      .text(width / 2, height * 0.2, "迷宮大冒險", {
         fontSize: "48px",
         color: "#ffffff",
         fontFamily: "Arial",
@@ -20,16 +22,30 @@ export class TitleScene extends Phaser.Scene {
 
     // Subtitle
     this.add
-      .text(width / 2, height * 0.25 + 55, "Maze Adventure", {
+      .text(width / 2, height * 0.2 + 55, "Maze Adventure", {
         fontSize: "20px",
         color: "#aabbcc",
         fontFamily: "Arial",
       })
       .setOrigin(0.5);
 
+    // Current user display
+    if (profile) {
+      const slot = profileManager.getActiveSlot()!;
+      const completed = profileManager.getCompletedCount(slot);
+      this.add
+        .text(width / 2, height * 0.38, `${profile.name}　(${completed}/50 關)`, {
+          fontSize: "18px",
+          color: "#ffcc00",
+          fontFamily: "Arial",
+          fontStyle: "bold",
+        })
+        .setOrigin(0.5);
+    }
+
     // Play button
     const playBtn = this.add
-      .text(width / 2, height * 0.55, "開始遊戲", {
+      .text(width / 2, height * 0.5, "開始遊戲", {
         fontSize: "32px",
         color: "#ffffff",
         fontFamily: "Arial",
@@ -52,7 +68,7 @@ export class TitleScene extends Phaser.Scene {
 
     // How to Play button
     const helpBtn = this.add
-      .text(width / 2, height * 0.72, "遊戲說明", {
+      .text(width / 2, height * 0.64, "遊戲說明", {
         fontSize: "24px",
         color: "#aabbcc",
         fontFamily: "Arial",
@@ -70,6 +86,28 @@ export class TitleScene extends Phaser.Scene {
     );
     helpBtn.on("pointerdown", () => {
       this.scene.start("HowToPlayScene");
+    });
+
+    // Switch user button
+    const switchBtn = this.add
+      .text(width / 2, height * 0.78, "切換使用者", {
+        fontSize: "20px",
+        color: "#8899aa",
+        fontFamily: "Arial",
+        backgroundColor: "#2a2a44",
+        padding: { x: 25, y: 8 },
+      })
+      .setOrigin(0.5)
+      .setInteractive({ useHandCursor: true });
+
+    switchBtn.on("pointerover", () =>
+      switchBtn.setStyle({ backgroundColor: "#333355" })
+    );
+    switchBtn.on("pointerout", () =>
+      switchBtn.setStyle({ backgroundColor: "#2a2a44" })
+    );
+    switchBtn.on("pointerdown", () => {
+      this.scene.start("ProfileSelectScene");
     });
   }
 }

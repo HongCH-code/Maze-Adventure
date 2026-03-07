@@ -1,6 +1,5 @@
 import { PlayerProgress, LevelScore } from "../types";
-
-const STORAGE_KEY = "maze-adventure-progress";
+import { profileManager } from "./ProfileManager";
 
 const DEFAULT_PROGRESS: PlayerProgress = {
   highestUnlockedLevel: 1,
@@ -9,14 +8,16 @@ const DEFAULT_PROGRESS: PlayerProgress = {
 
 export class ProgressManager {
   private progress: PlayerProgress;
+  private storageKey: string;
 
   constructor() {
+    this.storageKey = profileManager.getActiveProgressKey();
     this.progress = this.load();
   }
 
   load(): PlayerProgress {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(this.storageKey);
       if (raw) {
         const parsed = JSON.parse(raw) as PlayerProgress;
         if (parsed.highestUnlockedLevel && parsed.levelScores) {
@@ -31,7 +32,7 @@ export class ProgressManager {
 
   save(): void {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.progress));
+      localStorage.setItem(this.storageKey, JSON.stringify(this.progress));
     } catch {
       // localStorage full or unavailable — silent fail
     }

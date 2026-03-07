@@ -35,14 +35,14 @@ export class InputManager {
     const centerX = width - 90;
     const centerY = height - 100;
 
-    const directions: { dir: Direction; dx: number; dy: number; label: string }[] = [
-      { dir: "up", dx: 0, dy: -(btnSize + gap), label: "\u25B2" },
-      { dir: "down", dx: 0, dy: btnSize + gap, label: "\u25BC" },
-      { dir: "left", dx: -(btnSize + gap), dy: 0, label: "\u25C0" },
-      { dir: "right", dx: btnSize + gap, dy: 0, label: "\u25B6" },
+    const directions: { dir: Direction; dx: number; dy: number }[] = [
+      { dir: "up", dx: 0, dy: -(btnSize + gap) },
+      { dir: "down", dx: 0, dy: btnSize + gap },
+      { dir: "left", dx: -(btnSize + gap), dy: 0 },
+      { dir: "right", dx: btnSize + gap, dy: 0 },
     ];
 
-    for (const { dir, dx, dy, label } of directions) {
+    for (const { dir, dx, dy } of directions) {
       const x = centerX + dx;
       const y = centerY + dy;
 
@@ -50,16 +50,22 @@ export class InputManager {
       bg.fillStyle(0xffffff, 0.25);
       bg.fillRoundedRect(-btnSize / 2, -btnSize / 2, btnSize, btnSize, 8);
 
-      const text = this.scene.add
-        .text(0, 0, label, {
-          fontSize: "24px",
-          color: "#ffffff",
-          fontFamily: "Arial",
-        })
-        .setOrigin(0.5);
+      // Draw arrow triangle with graphics for consistent look across devices
+      const arrow = this.scene.add.graphics();
+      const s = 10; // half-size of triangle
+      arrow.fillStyle(0xffffff, 1);
+      if (dir === "up") {
+        arrow.fillTriangle(0, -s, -s, s, s, s);
+      } else if (dir === "down") {
+        arrow.fillTriangle(0, s, -s, -s, s, -s);
+      } else if (dir === "left") {
+        arrow.fillTriangle(-s, 0, s, -s, s, s);
+      } else {
+        arrow.fillTriangle(s, 0, -s, -s, -s, s);
+      }
 
       const container = this.scene.add
-        .container(x, y, [bg, text])
+        .container(x, y, [bg, arrow])
         .setScrollFactor(0)
         .setDepth(100)
         .setSize(btnSize, btnSize)

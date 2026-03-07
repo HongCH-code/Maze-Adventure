@@ -40,7 +40,7 @@ export class BootScene extends Phaser.Scene {
   }
 
   create(): void {
-    this.scene.start("TitleScene");
+    this.scene.start("ProfileSelectScene");
   }
 
   private generatePlaceholderTextures(): void {
