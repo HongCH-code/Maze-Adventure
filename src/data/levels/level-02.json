@@ -1,0 +1,18 @@
+{
+  "level": 2,
+  "gridWidth": 9,
+  "gridHeight": 9,
+  "seed": 23456,
+  "difficultyTier": 1,
+  "puzzleGates": [
+    {
+      "id": "gate-2-1",
+      "position": { "x": 3, "y": 3 },
+      "puzzleType": "addition",
+      "difficulty": 1
+    }
+  ],
+  "items": [],
+  "startPosition": { "x": 0, "y": 0 },
+  "exitPosition": { "x": 8, "y": 8 }
+}

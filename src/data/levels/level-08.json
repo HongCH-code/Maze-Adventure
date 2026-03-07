@@ -1,0 +1,21 @@
+{
+  "level": 8,
+  "gridWidth": 13,
+  "gridHeight": 13,
+  "seed": 89012,
+  "difficultyTier": 2,
+  "puzzleGates": [
+    { "id": "gate-8-1", "position": { "x": 2, "y": 2 }, "puzzleType": "addition", "difficulty": 2 },
+    { "id": "gate-8-2", "position": { "x": 5, "y": 4 }, "puzzleType": "subtraction", "difficulty": 2 }
+  ],
+  "items": [
+    { "position": { "x": 1, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 3, "y": 3 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 4, "y": 2 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 5, "y": 5 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 2, "y": 4 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 1, "y": 3 }, "itemType": "key", "requiredForGate": "gate-8-2" }
+  ],
+  "startPosition": { "x": 0, "y": 0 },
+  "exitPosition": { "x": 12, "y": 12 }
+}

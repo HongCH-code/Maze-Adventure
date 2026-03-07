@@ -1,0 +1,24 @@
+{
+  "level": 21,
+  "gridWidth": 15,
+  "gridHeight": 15,
+  "seed": 23207,
+  "difficultyTier": 5,
+  "puzzleGates": [
+    { "id": "gate-21-1", "position": { "x": 5, "y": 3 }, "puzzleType": "twoDigitAdd", "difficulty": 5 },
+    { "id": "gate-21-2", "position": { "x": 10, "y": 7 }, "puzzleType": "twoDigitSub", "difficulty": 5 }
+  ],
+  "items": [
+    { "position": { "x": 2, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 7, "y": 4 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 12, "y": 6 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 4, "y": 10 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 9, "y": 12 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 3, "y": 2 }, "itemType": "key", "requiredForGate": "gate-21-1" }
+  ],
+  "teleportPairs": [
+    { "id": "tp-21-1", "posA": { "x": 1, "y": 3 }, "posB": { "x": 13, "y": 11 } }
+  ],
+  "startPosition": { "x": 0, "y": 0 },
+  "exitPosition": { "x": 14, "y": 14 }
+}

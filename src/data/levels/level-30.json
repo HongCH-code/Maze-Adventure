@@ -1,0 +1,28 @@
+{
+  "level": 30,
+  "gridWidth": 21,
+  "gridHeight": 21,
+  "seed": 25007,
+  "difficultyTier": 5,
+  "puzzleGates": [
+    { "id": "gate-30-1", "position": { "x": 7, "y": 5 }, "puzzleType": "twoDigitAdd", "difficulty": 5 },
+    { "id": "gate-30-2", "position": { "x": 16, "y": 10 }, "puzzleType": "twoDigitSub", "difficulty": 5 },
+    { "id": "gate-30-3", "position": { "x": 5, "y": 16 }, "puzzleType": "twoDigitAdd", "difficulty": 5 }
+  ],
+  "items": [
+    { "position": { "x": 3, "y": 2 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 11, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 19, "y": 4 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 6, "y": 9 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 14, "y": 14 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 9, "y": 7 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 18, "y": 17 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 5, "y": 4 }, "itemType": "key", "requiredForGate": "gate-30-1" }
+  ],
+  "teleportPairs": [
+    { "id": "tp-30-1", "posA": { "x": 2, "y": 6 }, "posB": { "x": 18, "y": 16 } },
+    { "id": "tp-30-2", "posA": { "x": 1, "y": 18 }, "posB": { "x": 19, "y": 3 } }
+  ],
+  "startPosition": { "x": 0, "y": 0 },
+  "exitPosition": { "x": 20, "y": 20 }
+}

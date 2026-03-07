@@ -1,0 +1,180 @@
+{
+  "level": 36,
+  "gridWidth": 23,
+  "gridHeight": 23,
+  "seed": 35113,
+  "difficultyTier": 6,
+  "puzzleGates": [
+    {
+      "id": "gate-36-1",
+      "position": {
+        "x": 6,
+        "y": 5
+      },
+      "puzzleType": "twoDigitAdd",
+      "difficulty": 6
+    },
+    {
+      "id": "gate-36-2",
+      "position": {
+        "x": 17,
+        "y": 8
+      },
+      "puzzleType": "placeValue",
+      "difficulty": 6
+    },
+    {
+      "id": "gate-36-3",
+      "position": {
+        "x": 10,
+        "y": 16
+      },
+      "puzzleType": "twoDigitSub",
+      "difficulty": 6
+    }
+  ],
+  "items": [
+    {
+      "position": {
+        "x": 3,
+        "y": 1
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 11,
+        "y": 3
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 20,
+        "y": 5
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 4,
+        "y": 12
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 15,
+        "y": 15
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 8,
+        "y": 20
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 19,
+        "y": 19
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 9,
+        "y": 7
+      },
+      "itemType": "coin",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 16,
+        "y": 13
+      },
+      "itemType": "coin",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 4,
+        "y": 4
+      },
+      "itemType": "key",
+      "requiredForGate": "gate-36-1"
+    }
+  ],
+  "teleportPairs": [
+    {
+      "id": "tp-36-1",
+      "posA": {
+        "x": 2,
+        "y": 7
+      },
+      "posB": {
+        "x": 20,
+        "y": 17
+      }
+    },
+    {
+      "id": "tp-36-2",
+      "posA": {
+        "x": 1,
+        "y": 19
+      },
+      "posB": {
+        "x": 21,
+        "y": 3
+      }
+    }
+  ],
+  "startPosition": {
+    "x": 0,
+    "y": 0
+  },
+  "exitPosition": {
+    "x": 22,
+    "y": 22
+  },
+  "traps": [
+    {
+      "position": {
+        "x": 3,
+        "y": 5
+      },
+      "group": 0
+    },
+    {
+      "position": {
+        "x": 7,
+        "y": 1
+      },
+      "group": 1
+    },
+    {
+      "position": {
+        "x": 6,
+        "y": 1
+      },
+      "group": 0
+    },
+    {
+      "position": {
+        "x": 7,
+        "y": 9
+      },
+      "group": 1
+    }
+  ]
+}

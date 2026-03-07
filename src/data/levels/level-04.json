@@ -1,0 +1,23 @@
+{
+  "level": 4,
+  "gridWidth": 11,
+  "gridHeight": 11,
+  "seed": 45678,
+  "difficultyTier": 1,
+  "puzzleGates": [
+    {
+      "id": "gate-4-1",
+      "position": { "x": 2, "y": 4 },
+      "puzzleType": "addition",
+      "difficulty": 1
+    }
+  ],
+  "items": [
+    { "position": { "x": 1, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 3, "y": 2 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 2, "y": 3 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 4, "y": 1 }, "itemType": "coin", "requiredForGate": null }
+  ],
+  "startPosition": { "x": 0, "y": 0 },
+  "exitPosition": { "x": 10, "y": 10 }
+}

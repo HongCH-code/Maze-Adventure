@@ -1,0 +1,324 @@
+{
+  "level": 47,
+  "gridWidth": 29,
+  "gridHeight": 29,
+  "seed": 46317,
+  "difficultyTier": 7,
+  "puzzleGates": [
+    {
+      "id": "gate-47-1",
+      "position": {
+        "x": 10,
+        "y": 6
+      },
+      "puzzleType": "twoDigitAdd",
+      "difficulty": 7
+    },
+    {
+      "id": "gate-47-2",
+      "position": {
+        "x": 23,
+        "y": 11
+      },
+      "puzzleType": "ordering",
+      "difficulty": 7
+    },
+    {
+      "id": "gate-47-3",
+      "position": {
+        "x": 8,
+        "y": 20
+      },
+      "puzzleType": "placeValue",
+      "difficulty": 7
+    },
+    {
+      "id": "gate-47-4",
+      "position": {
+        "x": 20,
+        "y": 24
+      },
+      "puzzleType": "twoDigitSub",
+      "difficulty": 7
+    },
+    {
+      "id": "gate-47-5",
+      "position": {
+        "x": 14,
+        "y": 14
+      },
+      "puzzleType": "twoDigitAdd",
+      "difficulty": 7
+    }
+  ],
+  "items": [
+    {
+      "position": {
+        "x": 3,
+        "y": 2
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 15,
+        "y": 1
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 26,
+        "y": 5
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 5,
+        "y": 12
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 19,
+        "y": 15
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 11,
+        "y": 24
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 27,
+        "y": 21
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 7,
+        "y": 8
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 17,
+        "y": 18
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 25,
+        "y": 9
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 4,
+        "y": 26
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 22,
+        "y": 3
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 12,
+        "y": 7
+      },
+      "itemType": "coin",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 24,
+        "y": 18
+      },
+      "itemType": "coin",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 6,
+        "y": 26
+      },
+      "itemType": "coin",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 16,
+        "y": 11
+      },
+      "itemType": "coin",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 21,
+        "y": 26
+      },
+      "itemType": "coin",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 8,
+        "y": 5
+      },
+      "itemType": "key",
+      "requiredForGate": "gate-47-1"
+    },
+    {
+      "position": {
+        "x": 20,
+        "y": 10
+      },
+      "itemType": "key",
+      "requiredForGate": "gate-47-2"
+    },
+    {
+      "position": {
+        "x": 6,
+        "y": 18
+      },
+      "itemType": "key",
+      "requiredForGate": "gate-47-3"
+    }
+  ],
+  "teleportPairs": [
+    {
+      "id": "tp-47-1",
+      "posA": {
+        "x": 1,
+        "y": 10
+      },
+      "posB": {
+        "x": 27,
+        "y": 24
+      }
+    },
+    {
+      "id": "tp-47-2",
+      "posA": {
+        "x": 2,
+        "y": 26
+      },
+      "posB": {
+        "x": 26,
+        "y": 2
+      }
+    },
+    {
+      "id": "tp-47-3",
+      "posA": {
+        "x": 13,
+        "y": 4
+      },
+      "posB": {
+        "x": 15,
+        "y": 26
+      }
+    }
+  ],
+  "startPosition": {
+    "x": 0,
+    "y": 0
+  },
+  "exitPosition": {
+    "x": 28,
+    "y": 28
+  },
+  "traps": [
+    {
+      "position": {
+        "x": 10,
+        "y": 4
+      },
+      "group": 0
+    },
+    {
+      "position": {
+        "x": 12,
+        "y": 10
+      },
+      "group": 1
+    },
+    {
+      "position": {
+        "x": 6,
+        "y": 2
+      },
+      "group": 0
+    },
+    {
+      "position": {
+        "x": 6,
+        "y": 9
+      },
+      "group": 1
+    },
+    {
+      "position": {
+        "x": 2,
+        "y": 10
+      },
+      "group": 0
+    },
+    {
+      "position": {
+        "x": 10,
+        "y": 12
+      },
+      "group": 1
+    },
+    {
+      "position": {
+        "x": 5,
+        "y": 8
+      },
+      "group": 0
+    },
+    {
+      "position": {
+        "x": 12,
+        "y": 1
+      },
+      "group": 1
+    },
+    {
+      "position": {
+        "x": 6,
+        "y": 10
+      },
+      "group": 0
+    }
+  ]
+}

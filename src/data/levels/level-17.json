@@ -1,0 +1,32 @@
+{
+  "level": 17,
+  "gridWidth": 21,
+  "gridHeight": 21,
+  "seed": 17890,
+  "difficultyTier": 4,
+  "puzzleGates": [
+    { "id": "gate-17-1", "position": { "x": 4, "y": 3 }, "puzzleType": "subtraction", "difficulty": 4 },
+    { "id": "gate-17-2", "position": { "x": 7, "y": 5 }, "puzzleType": "counting", "difficulty": 4 },
+    { "id": "gate-17-3", "position": { "x": 5, "y": 8 }, "puzzleType": "comparison", "difficulty": 4 },
+    { "id": "gate-17-4", "position": { "x": 3, "y": 6 }, "puzzleType": "addition", "difficulty": 4 }
+  ],
+  "items": [
+    { "position": { "x": 1, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 5, "y": 2 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 8, "y": 3 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 3, "y": 5 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 6, "y": 7 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 9, "y": 4 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 2, "y": 8 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 7, "y": 8 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 4, "y": 6 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 8, "y": 7 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 2, "y": 4 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 9, "y": 9 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 1, "y": 2 }, "itemType": "key", "requiredForGate": "gate-17-1" },
+    { "position": { "x": 6, "y": 4 }, "itemType": "key", "requiredForGate": "gate-17-3" },
+    { "position": { "x": 2, "y": 5 }, "itemType": "key", "requiredForGate": "gate-17-4" }
+  ],
+  "startPosition": { "x": 0, "y": 0 },
+  "exitPosition": { "x": 20, "y": 20 }
+}

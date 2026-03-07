@@ -1,0 +1,27 @@
+{
+  "level": 13,
+  "gridWidth": 17,
+  "gridHeight": 17,
+  "seed": 13456,
+  "difficultyTier": 3,
+  "puzzleGates": [
+    { "id": "gate-13-1", "position": { "x": 3, "y": 3 }, "puzzleType": "addition", "difficulty": 3 },
+    { "id": "gate-13-2", "position": { "x": 6, "y": 5 }, "puzzleType": "counting", "difficulty": 3 },
+    { "id": "gate-13-3", "position": { "x": 4, "y": 7 }, "puzzleType": "subtraction", "difficulty": 3 }
+  ],
+  "items": [
+    { "position": { "x": 1, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 4, "y": 2 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 7, "y": 3 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 2, "y": 5 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 5, "y": 6 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 3, "y": 7 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 6, "y": 4 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 2, "y": 6 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 7, "y": 7 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 1, "y": 2 }, "itemType": "key", "requiredForGate": "gate-13-1" },
+    { "position": { "x": 5, "y": 4 }, "itemType": "key", "requiredForGate": "gate-13-3" }
+  ],
+  "startPosition": { "x": 0, "y": 0 },
+  "exitPosition": { "x": 16, "y": 16 }
+}

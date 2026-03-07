@@ -1,0 +1,203 @@
+{
+  "level": 38,
+  "gridWidth": 25,
+  "gridHeight": 25,
+  "seed": 35513,
+  "difficultyTier": 6,
+  "puzzleGates": [
+    {
+      "id": "gate-38-1",
+      "position": {
+        "x": 7,
+        "y": 4
+      },
+      "puzzleType": "twoDigitAdd",
+      "difficulty": 6
+    },
+    {
+      "id": "gate-38-2",
+      "position": {
+        "x": 18,
+        "y": 9
+      },
+      "puzzleType": "twoDigitSub",
+      "difficulty": 6
+    },
+    {
+      "id": "gate-38-3",
+      "position": {
+        "x": 11,
+        "y": 18
+      },
+      "puzzleType": "placeValue",
+      "difficulty": 6
+    }
+  ],
+  "items": [
+    {
+      "position": {
+        "x": 3,
+        "y": 1
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 13,
+        "y": 2
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 22,
+        "y": 6
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 5,
+        "y": 12
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 16,
+        "y": 15
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 9,
+        "y": 22
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 21,
+        "y": 20
+      },
+      "itemType": "star",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 10,
+        "y": 8
+      },
+      "itemType": "coin",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 19,
+        "y": 17
+      },
+      "itemType": "coin",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 4,
+        "y": 20
+      },
+      "itemType": "coin",
+      "requiredForGate": null
+    },
+    {
+      "position": {
+        "x": 5,
+        "y": 3
+      },
+      "itemType": "key",
+      "requiredForGate": "gate-38-1"
+    },
+    {
+      "position": {
+        "x": 15,
+        "y": 8
+      },
+      "itemType": "key",
+      "requiredForGate": "gate-38-2"
+    }
+  ],
+  "teleportPairs": [
+    {
+      "id": "tp-38-1",
+      "posA": {
+        "x": 2,
+        "y": 7
+      },
+      "posB": {
+        "x": 22,
+        "y": 19
+      }
+    },
+    {
+      "id": "tp-38-2",
+      "posA": {
+        "x": 1,
+        "y": 21
+      },
+      "posB": {
+        "x": 23,
+        "y": 3
+      }
+    }
+  ],
+  "startPosition": {
+    "x": 0,
+    "y": 0
+  },
+  "exitPosition": {
+    "x": 24,
+    "y": 24
+  },
+  "traps": [
+    {
+      "position": {
+        "x": 8,
+        "y": 9
+      },
+      "group": 0
+    },
+    {
+      "position": {
+        "x": 3,
+        "y": 5
+      },
+      "group": 1
+    },
+    {
+      "position": {
+        "x": 8,
+        "y": 7
+      },
+      "group": 0
+    },
+    {
+      "position": {
+        "x": 10,
+        "y": 2
+      },
+      "group": 1
+    },
+    {
+      "position": {
+        "x": 3,
+        "y": 2
+      },
+      "group": 0
+    }
+  ]
+}
