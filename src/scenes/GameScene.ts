@@ -11,6 +11,8 @@ import {
   ItemPlacementData,
   TeleportPairData,
   TrapData,
+  WaterCurrentData,
+  FogZoneData,
 } from "../types";
 
 // Import all level JSONs statically for Vite bundling
@@ -172,6 +174,13 @@ export class GameScene extends Phaser.Scene {
   private trapPhase = 0; // which group is currently dangerous
   private startGridPos: Position = { x: 1, y: 1 };
 
+  // Water current tracking
+  private currentSprites: Map<string, { sprite: Phaser.GameObjects.Image; direction: Direction; strength: number }> = new Map();
+
+  // Fog tracking
+  private fogSprites: Map<string, Phaser.GameObjects.Image> = new Map();
+  private revealedFog: Set<string> = new Set();
+
   constructor() {
     super({ key: "GameScene" });
   }
@@ -193,6 +202,9 @@ export class GameScene extends Phaser.Scene {
     this.teleportMap.clear();
     this.trapSprites.clear();
     this.trapPhase = 0;
+    this.currentSprites.clear();
+    this.fogSprites.clear();
+    this.revealedFog.clear();
     this.exitLocked = false;
 
     if (!this.levelData) {
@@ -238,16 +250,17 @@ export class GameScene extends Phaser.Scene {
     occupied.add(`${this.exitPos.x},${this.exitPos.y}`);
 
     // Render maze tiles
+    const isOcean = this.isOceanLevel();
     for (let y = 0; y < this.grid.length; y++) {
       for (let x = 0; x < this.grid[y].length; x++) {
         const cell = this.grid[y][x];
         const px = this.offsetX + x * TILE_SIZE + TILE_SIZE / 2;
         const py = this.offsetY + y * TILE_SIZE + TILE_SIZE / 2;
 
-        let textureKey = "wall";
-        if (cell.type === "path") textureKey = "path";
+        let textureKey = isOcean ? "ocean_wall" : "wall";
+        if (cell.type === "path") textureKey = isOcean ? "ocean_path" : "path";
         else if (cell.type === "start") textureKey = "start";
-        else if (cell.type === "exit") textureKey = "path"; // draw path, overlay exit sprite
+        else if (cell.type === "exit") textureKey = isOcean ? "ocean_path" : "path";
 
         this.add.image(px, py, textureKey).setDisplaySize(TILE_SIZE, TILE_SIZE);
       }
@@ -380,6 +393,7 @@ export class GameScene extends Phaser.Scene {
       occupied.add(keyB);
 
       // Render both pads
+      const teleportTexture = isOcean ? "whirlpool" : "teleport";
       for (const [pos, key] of [
         [posA, keyA],
         [posB, keyB],
@@ -387,7 +401,7 @@ export class GameScene extends Phaser.Scene {
         const px = this.offsetX + pos.x * TILE_SIZE + TILE_SIZE / 2;
         const py = this.offsetY + pos.y * TILE_SIZE + TILE_SIZE / 2;
         const sprite = this.add
-          .image(px, py, "teleport")
+          .image(px, py, teleportTexture)
           .setDisplaySize(TILE_SIZE * 0.8, TILE_SIZE * 0.8)
           .setTint(color)
           .setDepth(1);
@@ -422,9 +436,9 @@ export class GameScene extends Phaser.Scene {
       const px = this.offsetX + gridPos.x * TILE_SIZE + TILE_SIZE / 2;
       const py = this.offsetY + gridPos.y * TILE_SIZE + TILE_SIZE / 2;
 
-      let textureKey = "star";
-      if (item.itemType === "coin") textureKey = "coin";
-      else if (item.itemType === "key") textureKey = "key";
+      let textureKey = isOcean ? "starfish" : "star";
+      if (item.itemType === "coin") textureKey = isOcean ? "pearl" : "coin";
+      else if (item.itemType === "key") textureKey = isOcean ? "shell" : "key";
 
       if (item.itemType === "star") this.totalItems.stars++;
       else if (item.itemType === "coin") this.totalItems.coins++;
@@ -452,8 +466,9 @@ export class GameScene extends Phaser.Scene {
       const px = this.offsetX + gridPos.x * TILE_SIZE + TILE_SIZE / 2;
       const py = this.offsetY + gridPos.y * TILE_SIZE + TILE_SIZE / 2;
 
+      const trapTexture = isOcean ? "jellyfish" : "trap";
       const sprite = this.add
-        .image(px, py, "trap")
+        .image(px, py, trapTexture)
         .setDisplaySize(TILE_SIZE * 0.75, TILE_SIZE * 0.75)
         .setDepth(1)
         .setAlpha(trap.group === 0 ? 1 : 0.2);
@@ -468,6 +483,57 @@ export class GameScene extends Phaser.Scene {
         loop: true,
         callback: () => this.toggleTraps(),
       });
+    }
+
+    // Place water currents
+    const waterCurrents = this.levelData.waterCurrents || [];
+    for (const current of waterCurrents) {
+      const gridPos = this.pickUniqueCell(walkableCells, occupied, current.position);
+      if (!gridPos) continue;
+      const cellKey = `${gridPos.x},${gridPos.y}`;
+      occupied.add(cellKey);
+
+      const px = this.offsetX + gridPos.x * TILE_SIZE + TILE_SIZE / 2;
+      const py = this.offsetY + gridPos.y * TILE_SIZE + TILE_SIZE / 2;
+
+      const rotationMap: Record<string, number> = {
+        right: 0,
+        down: Math.PI / 2,
+        left: Math.PI,
+        up: -Math.PI / 2,
+      };
+
+      const sprite = this.add
+        .image(px, py, "water_current")
+        .setDisplaySize(TILE_SIZE, TILE_SIZE)
+        .setRotation(rotationMap[current.direction] || 0)
+        .setDepth(0.5)
+        .setAlpha(0.7);
+
+      this.currentSprites.set(cellKey, {
+        sprite,
+        direction: current.direction,
+        strength: current.strength,
+      });
+    }
+
+    // Place fog zones (rendered AFTER items so fog covers them)
+    const fogZones = this.levelData.fogZones || [];
+    for (const fog of fogZones) {
+      const gridPos = this.pickUniqueCell(walkableCells, occupied, fog.position);
+      if (!gridPos) continue;
+      const cellKey = `${gridPos.x},${gridPos.y}`;
+      // Don't add to occupied — fog overlays items
+
+      const px = this.offsetX + gridPos.x * TILE_SIZE + TILE_SIZE / 2;
+      const py = this.offsetY + gridPos.y * TILE_SIZE + TILE_SIZE / 2;
+
+      const sprite = this.add
+        .image(px, py, "fog")
+        .setDisplaySize(TILE_SIZE, TILE_SIZE)
+        .setDepth(3);
+
+      this.fogSprites.set(cellKey, sprite);
     }
 
     // Determine if exit should be locked (stars exist = must collect all)
@@ -545,6 +611,30 @@ export class GameScene extends Phaser.Scene {
     this.events.on("gate-unlocked", (cellKey: string) => {
       this.handleGateUnlocked(cellKey);
     });
+
+    // Ocean atmosphere: bubble particles
+    if (isOcean) {
+      this.time.addEvent({
+        delay: 400,
+        loop: true,
+        callback: () => {
+          const bx = Phaser.Math.Between(0, this.cameras.main.width);
+          const by = this.cameras.main.height + 10;
+          const bubble = this.add.circle(bx, by, Phaser.Math.Between(2, 5), 0x88ccff, 0.4)
+            .setScrollFactor(0)
+            .setDepth(15);
+          this.tweens.add({
+            targets: bubble,
+            y: -10,
+            x: bx + Phaser.Math.Between(-20, 20),
+            alpha: 0,
+            duration: Phaser.Math.Between(3000, 5000),
+            ease: "Sine.easeIn",
+            onComplete: () => bubble.destroy(),
+          });
+        },
+      });
+    }
   }
 
   update(): void {
@@ -642,6 +732,9 @@ export class GameScene extends Phaser.Scene {
     const cell = this.grid[y][x];
     const cellKey = `${x},${y}`;
 
+    // Reveal fog in 1-tile radius
+    this.revealFog(x, y);
+
     // Check for item collection
     if (this.itemSprites.has(cellKey)) {
       const sprite = this.itemSprites.get(cellKey)!;
@@ -691,6 +784,13 @@ export class GameScene extends Phaser.Scene {
     if (this.teleportMap.has(cellKey)) {
       const dest = this.teleportMap.get(cellKey)!;
       this.handleTeleport(dest);
+      return;
+    }
+
+    // Check for water current
+    const currentInfo = this.currentSprites.get(cellKey);
+    if (currentInfo) {
+      this.handleWaterCurrent(currentInfo.direction, currentInfo.strength);
       return;
     }
 
@@ -784,6 +884,81 @@ export class GameScene extends Phaser.Scene {
         });
       },
     });
+  }
+
+  private handleWaterCurrent(direction: Direction, strength: number): void {
+    this.isMoving = true;
+    sfx.teleport(); // reuse teleport sound
+
+    const dx = direction === "left" ? -1 : direction === "right" ? 1 : 0;
+    const dy = direction === "up" ? -1 : direction === "down" ? 1 : 0;
+
+    let finalX = this.playerPos.x;
+    let finalY = this.playerPos.y;
+
+    for (let i = 0; i < strength; i++) {
+      const nextX = finalX + dx;
+      const nextY = finalY + dy;
+
+      if (nextX < 0 || nextX >= this.levelData.gridWidth ||
+          nextY < 0 || nextY >= this.levelData.gridHeight) break;
+      if (this.grid[nextY][nextX].type === "wall") break;
+
+      const nextKey = `${nextX},${nextY}`;
+      if (this.gateSprites.has(nextKey) && !this.unlockedGates.has(nextKey)) break;
+      if (this.barrierSprites.has(nextKey) && !this.unlockedBarriers.has(nextKey)) break;
+
+      finalX = nextX;
+      finalY = nextY;
+    }
+
+    if (finalX === this.playerPos.x && finalY === this.playerPos.y) {
+      this.isMoving = false;
+      return;
+    }
+
+    this.playerPos = { x: finalX, y: finalY };
+    const targetPx = this.offsetX + finalX * TILE_SIZE + TILE_SIZE / 2;
+    const targetPy = this.offsetY + finalY * TILE_SIZE + TILE_SIZE / 2;
+
+    this.tweens.add({
+      targets: this.player,
+      x: targetPx,
+      y: targetPy,
+      duration: 150 * strength,
+      ease: "Sine.easeOut",
+      onComplete: () => {
+        this.isMoving = false;
+        this.checkTile(finalX, finalY);
+      },
+    });
+  }
+
+  private revealFog(cx: number, cy: number): void {
+    for (let dy = -1; dy <= 1; dy++) {
+      for (let dx = -1; dx <= 1; dx++) {
+        const fx = cx + dx;
+        const fy = cy + dy;
+        const fKey = `${fx},${fy}`;
+        if (this.revealedFog.has(fKey)) continue;
+        const fogSprite = this.fogSprites.get(fKey);
+        if (fogSprite) {
+          this.revealedFog.add(fKey);
+          this.tweens.add({
+            targets: fogSprite,
+            alpha: 0,
+            duration: 300,
+            ease: "Power2",
+            onComplete: () => fogSprite.destroy(),
+          });
+          this.fogSprites.delete(fKey);
+        }
+      }
+    }
+  }
+
+  private isOceanLevel(): boolean {
+    return this.levelData.level >= 51 && this.levelData.level <= 65;
   }
 
   private updateExitSprite(): void {
