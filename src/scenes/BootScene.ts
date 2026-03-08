@@ -88,6 +88,17 @@ export class BootScene extends Phaser.Scene {
 
     // Trap (danger spikes)
     this.createTrapTexture(s);
+
+    // Ocean theme textures
+    this.createOceanWallTexture(s);
+    this.createOceanPathTexture(s);
+    this.createStarfishTexture(s);
+    this.createPearlTexture(s);
+    this.createShellTexture(s);
+    this.createWhirlpoolTexture(s);
+    this.createJellyfishTexture(s);
+    this.createWaterCurrentTexture(s);
+    this.createFogTexture(s);
   }
 
   private createStartTexture(s: number): void {
@@ -282,6 +293,174 @@ export class BootScene extends Phaser.Scene {
       );
     }
     g.generateTexture("trap", size, size);
+    g.destroy();
+  }
+
+  private createOceanWallTexture(s: number): void {
+    const g = this.add.graphics();
+    // Coral colored background
+    g.fillStyle(0xe8856e, 1);
+    g.fillRect(0, 0, s, s);
+    // Subtle texture lines
+    g.lineStyle(1, 0xd07060, 0.5);
+    g.lineBetween(0, s * 0.25, s, s * 0.3);
+    g.lineBetween(0, s * 0.55, s, s * 0.5);
+    g.lineBetween(0, s * 0.8, s, s * 0.85);
+    g.lineBetween(s * 0.3, 0, s * 0.25, s);
+    g.lineBetween(s * 0.7, 0, s * 0.75, s);
+    g.generateTexture("ocean_wall", s, s);
+    g.destroy();
+  }
+
+  private createOceanPathTexture(s: number): void {
+    const g = this.add.graphics();
+    // Sandy floor background
+    g.fillStyle(0xf5deb3, 1);
+    g.fillRect(0, 0, s, s);
+    // Subtle sand dots
+    g.fillStyle(0xe0c8a0, 0.6);
+    g.fillCircle(s * 0.2, s * 0.3, 1.5);
+    g.fillCircle(s * 0.7, s * 0.15, 1);
+    g.fillCircle(s * 0.5, s * 0.6, 1.5);
+    g.fillCircle(s * 0.85, s * 0.75, 1);
+    g.fillCircle(s * 0.15, s * 0.85, 1);
+    g.fillCircle(s * 0.6, s * 0.9, 1.5);
+    g.generateTexture("ocean_path", s, s);
+    g.destroy();
+  }
+
+  private createStarfishTexture(s: number): void {
+    const g = this.add.graphics();
+    const cx = s * 0.4;
+    const cy = s * 0.4;
+    const outer = s * 0.35;
+    const inner = s * 0.15;
+    // Orange-red 5-point star shape
+    g.fillStyle(0xff6347, 1);
+    g.beginPath();
+    for (let i = 0; i < 5; i++) {
+      const outerAngle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+      const innerAngle = outerAngle + Math.PI / 5;
+      g.lineTo(cx + Math.cos(outerAngle) * outer, cy + Math.sin(outerAngle) * outer);
+      g.lineTo(cx + Math.cos(innerAngle) * inner, cy + Math.sin(innerAngle) * inner);
+    }
+    g.closePath();
+    g.fillPath();
+    // Center dot highlight
+    g.fillStyle(0xff8060, 1);
+    g.fillCircle(cx, cy, s * 0.06);
+    g.generateTexture("starfish", Math.ceil(s * 0.8), Math.ceil(s * 0.8));
+    g.destroy();
+  }
+
+  private createPearlTexture(s: number): void {
+    const g = this.add.graphics();
+    const size = Math.ceil(s * 0.5);
+    const cx = size / 2;
+    const cy = size / 2;
+    // White circle
+    g.fillStyle(0xf0f0f0, 1);
+    g.fillCircle(cx, cy, size * 0.42);
+    // Highlight spot
+    g.fillStyle(0xffffff, 1);
+    g.fillCircle(cx - size * 0.12, cy - size * 0.12, size * 0.12);
+    g.generateTexture("pearl", size, size);
+    g.destroy();
+  }
+
+  private createShellTexture(s: number): void {
+    const g = this.add.graphics();
+    const size = Math.ceil(s * 0.7);
+    const cx = size / 2;
+    const cy = size * 0.55;
+    // Orange fan/shell shape
+    g.fillStyle(0xffb347, 1);
+    g.beginPath();
+    g.arc(cx, cy, size * 0.4, Math.PI, 0, false);
+    g.lineTo(cx, cy + size * 0.1);
+    g.closePath();
+    g.fillPath();
+    // Ridges
+    g.lineStyle(1, 0xe09030, 0.7);
+    for (let i = 0; i < 5; i++) {
+      const angle = Math.PI + (Math.PI * (i + 1)) / 6;
+      const rx = cx + Math.cos(angle) * size * 0.38;
+      const ry = cy + Math.sin(angle) * size * 0.38;
+      g.lineBetween(cx, cy + size * 0.1, rx, ry);
+    }
+    g.generateTexture("shell", size, size);
+    g.destroy();
+  }
+
+  private createWhirlpoolTexture(s: number): void {
+    const g = this.add.graphics();
+    const cx = s / 2;
+    const cy = s / 2;
+    // Outer ring
+    g.lineStyle(3, 0x0088cc, 0.8);
+    g.strokeCircle(cx, cy, s * 0.4);
+    // Middle ring
+    g.lineStyle(2, 0x00aaee, 0.8);
+    g.strokeCircle(cx, cy, s * 0.28);
+    // Inner ring
+    g.lineStyle(2, 0x0088cc, 0.8);
+    g.strokeCircle(cx, cy, s * 0.16);
+    // Dark center
+    g.fillStyle(0x003366, 1);
+    g.fillCircle(cx, cy, s * 0.08);
+    g.generateTexture("whirlpool", s, s);
+    g.destroy();
+  }
+
+  private createJellyfishTexture(s: number): void {
+    const g = this.add.graphics();
+    const cx = s / 2;
+    // Pink dome (top half)
+    g.fillStyle(0xff69b4, 0.85);
+    g.beginPath();
+    g.arc(cx, s * 0.35, s * 0.3, Math.PI, 0, false);
+    g.closePath();
+    g.fillPath();
+    // Tentacle lines
+    g.lineStyle(1.5, 0xff69b4, 0.7);
+    g.lineBetween(s * 0.28, s * 0.35, s * 0.22, s * 0.75);
+    g.lineBetween(s * 0.4, s * 0.35, s * 0.38, s * 0.8);
+    g.lineBetween(s * 0.5, s * 0.35, s * 0.5, s * 0.82);
+    g.lineBetween(s * 0.6, s * 0.35, s * 0.62, s * 0.8);
+    g.lineBetween(s * 0.72, s * 0.35, s * 0.78, s * 0.75);
+    g.generateTexture("jellyfish", s, s);
+    g.destroy();
+  }
+
+  private createWaterCurrentTexture(s: number): void {
+    const g = this.add.graphics();
+    // Light blue translucent background
+    g.fillStyle(0x4dc9f6, 0.3);
+    g.fillRect(0, 0, s, s);
+    // Arrow pointing right
+    g.fillStyle(0x4dc9f6, 0.7);
+    // Arrow shaft
+    g.fillRect(s * 0.15, s * 0.4, s * 0.45, s * 0.2);
+    // Arrow head (triangle)
+    g.fillTriangle(s * 0.6, s * 0.25, s * 0.6, s * 0.75, s * 0.9, s * 0.5);
+    g.generateTexture("water_current", s, s);
+    g.destroy();
+  }
+
+  private createFogTexture(s: number): void {
+    const g = this.add.graphics();
+    // Semi-transparent dark green overlay
+    g.fillStyle(0x1a4a3a, 0.75);
+    g.fillRect(0, 0, s, s);
+    // Seaweed lines
+    g.lineStyle(1.5, 0x2d6b4e, 0.6);
+    g.lineBetween(s * 0.2, s, s * 0.25, s * 0.3);
+    g.lineBetween(s * 0.25, s * 0.3, s * 0.18, 0);
+    g.lineBetween(s * 0.6, s, s * 0.55, s * 0.4);
+    g.lineBetween(s * 0.55, s * 0.4, s * 0.62, s * 0.1);
+    g.lineBetween(s * 0.85, s, s * 0.8, s * 0.5);
+    g.lineBetween(s * 0.8, s * 0.5, s * 0.88, s * 0.15);
+    g.generateTexture("fog", s, s);
     g.destroy();
   }
 
