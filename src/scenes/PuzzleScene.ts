@@ -118,7 +118,7 @@ export class PuzzleScene extends Phaser.Scene {
   }
 
   private handleAnswer(
-    choice: number,
+    choice: number | string,
     btnBg: Phaser.GameObjects.Graphics,
     btnText: Phaser.GameObjects.Text,
     bx: number,

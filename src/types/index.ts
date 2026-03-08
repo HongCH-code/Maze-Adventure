@@ -15,7 +15,13 @@ export type PuzzleType =
   | "twoDigitAdd"
   | "twoDigitSub"
   | "placeValue"
-  | "ordering";
+  | "ordering"
+  | "clockReading"
+  | "coinCounting"
+  | "zhuyinToChar"
+  | "imageToZhuyin"
+  | "oceanCreature"
+  | "lifeSafety";
 
 export type DifficultyTier = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
@@ -43,6 +49,16 @@ export interface TrapData {
   group: 0 | 1;
 }
 
+export interface WaterCurrentData {
+  position: Position;
+  direction: Direction; // reuse existing Direction type
+  strength: number;     // how many tiles player gets pushed (1-2)
+}
+
+export interface FogZoneData {
+  position: Position;
+}
+
 export interface LevelData {
   level: number;
   gridWidth: number;
@@ -53,6 +69,8 @@ export interface LevelData {
   items: ItemPlacementData[];
   teleportPairs?: TeleportPairData[];
   traps?: TrapData[];
+  waterCurrents?: WaterCurrentData[];
+  fogZones?: FogZoneData[];
   startPosition: Position;
   exitPosition: Position;
 }
@@ -71,8 +89,8 @@ export interface MazeCell {
 
 export interface Puzzle {
   question: string;
-  correctAnswer: number;
-  choices: number[];
+  correctAnswer: number | string;
+  choices: (number | string)[];
   puzzleType: PuzzleType;
 }
 

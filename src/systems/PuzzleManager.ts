@@ -54,7 +54,7 @@ function generateDigitChoices(correct: number): number[] {
   return [...choices].sort(() => Math.random() - 0.5);
 }
 
-const generators: Record<PuzzleType, PuzzleGenerator> = {
+const generators: Partial<Record<PuzzleType, PuzzleGenerator>> = {
   addition: (tier) => {
     const range = TIER_RANGES[tier];
     const a = randInt(range.min, Math.floor(range.max / 2));
