@@ -42,7 +42,8 @@ export class PuzzleScene extends Phaser.Scene {
 
     // Panel background
     const panelW = 500;
-    const panelH = 380;
+    const hasTextChoices = this.puzzle.choices.some(c => typeof c === "string" && `${c}`.length > 6);
+    const panelH = hasTextChoices ? 420 : 380;
     const panelX = (width - panelW) / 2;
     const panelY = (height - panelH) / 2;
 
@@ -52,9 +53,10 @@ export class PuzzleScene extends Phaser.Scene {
     panel.lineStyle(3, 0x4a90d9, 1);
     panel.strokeRoundedRect(panelX, panelY, panelW, panelH, 16);
 
-    // Question text — use smaller font for counting puzzles with emoji grids
+    // Question text — use smaller font for counting puzzles with emoji grids or text-heavy puzzle types
     const isCounting = this.puzzle.puzzleType === "counting";
-    const fontSize = isCounting ? "26px" : "36px";
+    const isTextPuzzle = ["zhuyinToChar", "imageToZhuyin", "lifeSafety", "oceanCreature"].includes(this.puzzle.puzzleType);
+    const fontSize = isCounting || isTextPuzzle ? "26px" : "36px";
     this.add
       .text(width / 2, panelY + 60, this.puzzle.question, {
         fontSize,
@@ -69,7 +71,7 @@ export class PuzzleScene extends Phaser.Scene {
 
     // Answer buttons (2x2 grid)
     const btnW = 180;
-    const btnH = 60;
+    const btnH = hasTextChoices ? 75 : 60;
     const btnGap = 20;
     const gridStartX = width / 2 - btnW - btnGap / 2;
     const gridStartY = panelY + 160;
@@ -84,12 +86,18 @@ export class PuzzleScene extends Phaser.Scene {
       btnBg.fillStyle(0x4a90d9, 1);
       btnBg.fillRoundedRect(bx, by, btnW, btnH, 10);
 
+      // Use smaller font for text-based answers
+      const isTextAnswer = typeof choice === "string";
+      const choiceFontSize = isTextAnswer && `${choice}`.length > 4 ? "16px" : "28px";
+
       const btnText = this.add
         .text(bx + btnW / 2, by + btnH / 2, `${choice}`, {
-          fontSize: "28px",
+          fontSize: choiceFontSize,
           color: "#ffffff",
           fontFamily: "Arial",
           fontStyle: "bold",
+          align: "center",
+          wordWrap: { width: btnW - 16 },
         })
         .setOrigin(0.5);
 
