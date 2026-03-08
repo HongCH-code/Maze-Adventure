@@ -60,6 +60,10 @@
     { "position": { "x": 17, "y": 13 } },
     { "position": { "x": 9, "y": 17 } },
     { "position": { "x": 11, "y": 17 } },
-    { "position": { "x": 9, "y": 19 } }
+    { "position": { "x": 9, "y": 19 } },
+    { "position": { "x": 7, "y": 7 } },
+    { "position": { "x": 11, "y": 13 } },
+    { "position": { "x": 9, "y": 11 } },
+    { "position": { "x": 23, "y": 19 } }
   ]
 }

@@ -550,15 +550,24 @@ export class GameScene extends Phaser.Scene {
     }
 
     // Place fog zones (rendered AFTER items so fog covers them)
+    // Fog deliberately IGNORES occupied set — it can overlay water currents,
+    // teleporters, traps, items etc. to hide them as surprises.
     const fogZones = this.levelData.fogZones || [];
     for (const fog of fogZones) {
-      const gridPos = this.pickUniqueCell(walkableCells, occupied, fog.position);
-      if (!gridPos) continue;
-      const cellKey = `${gridPos.x},${gridPos.y}`;
-      // Don't add to occupied — fog overlays items
+      // Find nearest walkable cell without checking occupied
+      const targetX = Math.min(Math.max(1, fog.position.x | 1), this.levelData.gridWidth - 2);
+      const targetY = Math.min(Math.max(1, fog.position.y | 1), this.levelData.gridHeight - 2);
+      const cellKey = `${targetX},${targetY}`;
 
-      const px = this.offsetX + gridPos.x * TILE_SIZE + TILE_SIZE / 2;
-      const py = this.offsetY + gridPos.y * TILE_SIZE + TILE_SIZE / 2;
+      // Skip if not a walkable cell or already has fog
+      if (this.grid[targetY]?.[targetX]?.type === "wall") continue;
+      if (this.fogSprites.has(cellKey)) continue;
+      // Don't fog the start or exit
+      if (targetX === this.startGridPos.x && targetY === this.startGridPos.y) continue;
+      if (targetX === this.exitPos.x && targetY === this.exitPos.y) continue;
+
+      const px = this.offsetX + targetX * TILE_SIZE + TILE_SIZE / 2;
+      const py = this.offsetY + targetY * TILE_SIZE + TILE_SIZE / 2;
 
       const sprite = this.add
         .image(px, py, "fog")

@@ -70,6 +70,12 @@
     { "position": { "x": 23, "y": 17 } },
     { "position": { "x": 21, "y": 19 } },
     { "position": { "x": 23, "y": 19 } },
-    { "position": { "x": 9, "y": 21 } }
+    { "position": { "x": 9, "y": 21 } },
+    { "position": { "x": 17, "y": 7 } },
+    { "position": { "x": 5, "y": 11 } },
+    { "position": { "x": 15, "y": 5 } },
+    { "position": { "x": 9, "y": 11 } },
+    { "position": { "x": 23, "y": 9 } },
+    { "position": { "x": 25, "y": 21 } }
   ]
 }
