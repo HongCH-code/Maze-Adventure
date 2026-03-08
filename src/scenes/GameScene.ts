@@ -206,6 +206,7 @@ export class GameScene extends Phaser.Scene {
 
   // Water current tracking
   private currentSprites: Map<string, { sprite: Phaser.GameObjects.Image; direction: Direction; strength: number }> = new Map();
+  private lastMoveDirection: Direction = "right";
 
   // Fog tracking
   private fogSprites: Map<string, Phaser.GameObjects.Image> = new Map();
@@ -233,6 +234,7 @@ export class GameScene extends Phaser.Scene {
     this.trapSprites.clear();
     this.trapPhase = 0;
     this.currentSprites.clear();
+    this.lastMoveDirection = "right";
     this.fogSprites.clear();
     this.revealedFog.clear();
     this.exitLocked = false;
@@ -737,6 +739,9 @@ export class GameScene extends Phaser.Scene {
       }
     }
 
+    // Save movement direction before animating
+    this.lastMoveDirection = direction;
+
     // Move player
     sfx.move();
     this.isMoving = true;
@@ -817,11 +822,15 @@ export class GameScene extends Phaser.Scene {
       return;
     }
 
-    // Check for water current
+    // Check for water current — only push if NOT walking against the current
     const currentInfo = this.currentSprites.get(cellKey);
     if (currentInfo) {
-      this.handleWaterCurrent(currentInfo.direction, currentInfo.strength);
-      return;
+      const opposites: Record<string, string> = { up: "down", down: "up", left: "right", right: "left" };
+      if (this.lastMoveDirection !== opposites[currentInfo.direction]) {
+        this.handleWaterCurrent(currentInfo.direction, currentInfo.strength);
+        return;
+      }
+      // Walking against current — player fights through, no push
     }
 
     // Check for exit

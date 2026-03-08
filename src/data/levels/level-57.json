@@ -28,9 +28,8 @@
     { "position": { "x": 5, "y": 13 }, "itemType": "key", "requiredForGate": "gate-57-4" }
   ],
   "waterCurrents": [
-    { "position": { "x": 9, "y": 7 }, "direction": "down", "strength": 1 },
+    { "position": { "x": 5, "y": 5 }, "direction": "right", "strength": 1 },
     { "position": { "x": 9, "y": 9 }, "direction": "down", "strength": 1 },
-    { "position": { "x": 13, "y": 5 }, "direction": "left", "strength": 2 },
-    { "position": { "x": 11, "y": 13 }, "direction": "right", "strength": 1 }
+    { "position": { "x": 13, "y": 13 }, "direction": "left", "strength": 1 }
   ]
 }

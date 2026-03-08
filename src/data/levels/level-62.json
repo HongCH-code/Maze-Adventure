@@ -42,11 +42,11 @@
     { "position": { "x": 19, "y": 21 }, "group": 1 }
   ],
   "waterCurrents": [
-    { "position": { "x": 11, "y": 7 }, "direction": "right", "strength": 1 },
-    { "position": { "x": 13, "y": 7 }, "direction": "right", "strength": 1 },
-    { "position": { "x": 15, "y": 7 }, "direction": "down", "strength": 1 },
-    { "position": { "x": 7, "y": 13 }, "direction": "left", "strength": 2 },
-    { "position": { "x": 9, "y": 19 }, "direction": "right", "strength": 1 }
+    { "position": { "x": 7, "y": 7 }, "direction": "right", "strength": 1 },
+    { "position": { "x": 15, "y": 5 }, "direction": "down", "strength": 1 },
+    { "position": { "x": 11, "y": 13 }, "direction": "left", "strength": 1 },
+    { "position": { "x": 9, "y": 19 }, "direction": "up", "strength": 1 },
+    { "position": { "x": 19, "y": 17 }, "direction": "right", "strength": 1 }
   ],
   "fogZones": [
     { "position": { "x": 3, "y": 7 } },

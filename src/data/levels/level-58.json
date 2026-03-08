@@ -34,9 +34,9 @@
     { "position": { "x": 17, "y": 13 }, "group": 1 }
   ],
   "waterCurrents": [
-    { "position": { "x": 9, "y": 7 }, "direction": "right", "strength": 1 },
-    { "position": { "x": 11, "y": 7 }, "direction": "right", "strength": 1 },
-    { "position": { "x": 7, "y": 13 }, "direction": "down", "strength": 2 }
+    { "position": { "x": 7, "y": 7 }, "direction": "right", "strength": 1 },
+    { "position": { "x": 11, "y": 13 }, "direction": "up", "strength": 1 },
+    { "position": { "x": 15, "y": 9 }, "direction": "left", "strength": 1 }
   ],
   "fogZones": [
     { "position": { "x": 5, "y": 7 } },

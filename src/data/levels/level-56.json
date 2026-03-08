@@ -25,7 +25,7 @@
     { "position": { "x": 3, "y": 13 }, "itemType": "key", "requiredForGate": "gate-56-3" }
   ],
   "waterCurrents": [
-    { "position": { "x": 9, "y": 5 }, "direction": "right", "strength": 1 },
-    { "position": { "x": 11, "y": 5 }, "direction": "right", "strength": 1 }
+    { "position": { "x": 5, "y": 9 }, "direction": "down", "strength": 1 },
+    { "position": { "x": 13, "y": 9 }, "direction": "left", "strength": 1 }
   ]
 }
