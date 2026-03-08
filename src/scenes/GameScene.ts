@@ -66,6 +66,21 @@ import level47 from "../data/levels/level-47.json";
 import level48 from "../data/levels/level-48.json";
 import level49 from "../data/levels/level-49.json";
 import level50 from "../data/levels/level-50.json";
+import level51 from "../data/levels/level-51.json";
+import level52 from "../data/levels/level-52.json";
+import level53 from "../data/levels/level-53.json";
+import level54 from "../data/levels/level-54.json";
+import level55 from "../data/levels/level-55.json";
+import level56 from "../data/levels/level-56.json";
+import level57 from "../data/levels/level-57.json";
+import level58 from "../data/levels/level-58.json";
+import level59 from "../data/levels/level-59.json";
+import level60 from "../data/levels/level-60.json";
+import level61 from "../data/levels/level-61.json";
+import level62 from "../data/levels/level-62.json";
+import level63 from "../data/levels/level-63.json";
+import level64 from "../data/levels/level-64.json";
+import level65 from "../data/levels/level-65.json";
 
 const LEVEL_MAP: Record<number, LevelData> = {
   1: level01 as LevelData,
@@ -118,6 +133,21 @@ const LEVEL_MAP: Record<number, LevelData> = {
   48: level48 as LevelData,
   49: level49 as LevelData,
   50: level50 as LevelData,
+  51: level51 as LevelData,
+  52: level52 as LevelData,
+  53: level53 as LevelData,
+  54: level54 as LevelData,
+  55: level55 as LevelData,
+  56: level56 as LevelData,
+  57: level57 as LevelData,
+  58: level58 as LevelData,
+  59: level59 as LevelData,
+  60: level60 as LevelData,
+  61: level61 as LevelData,
+  62: level62 as LevelData,
+  63: level63 as LevelData,
+  64: level64 as LevelData,
+  65: level65 as LevelData,
 };
 
 const TILE_SIZE = 32;
@@ -1001,7 +1031,7 @@ export class GameScene extends Phaser.Scene {
     const elapsed = (Date.now() - this.startTime) / 1000;
 
     const nextLevel = this.levelData.level + 1;
-    if (nextLevel <= 50) {
+    if (nextLevel <= 65) {
       this.progressManager.unlockLevel(nextLevel);
     }
 

@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { ProgressManager } from "../systems/ProgressManager";
 
-const TOTAL_LEVELS = 50;
+const TOTAL_LEVELS = 65;
 const COLS = 5;
 const ROWS_PER_PAGE = 4;
 const LEVELS_PER_PAGE = COLS * ROWS_PER_PAGE;
