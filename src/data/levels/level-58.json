@@ -1,0 +1,53 @@
+{
+  "level": 58,
+  "gridWidth": 21,
+  "gridHeight": 21,
+  "seed": 58001,
+  "difficultyTier": 7,
+  "startPosition": { "x": 1, "y": 1 },
+  "exitPosition": { "x": 19, "y": 19 },
+  "puzzleGates": [
+    { "id": "gate-58-1", "position": { "x": 9, "y": 3 }, "puzzleType": "clockReading", "difficulty": 7 },
+    { "id": "gate-58-2", "position": { "x": 15, "y": 7 }, "puzzleType": "coinCounting", "difficulty": 7 },
+    { "id": "gate-58-3", "position": { "x": 5, "y": 13 }, "puzzleType": "zhuyinToChar", "difficulty": 7 },
+    { "id": "gate-58-4", "position": { "x": 13, "y": 17 }, "puzzleType": "clockReading", "difficulty": 7 }
+  ],
+  "items": [
+    { "position": { "x": 3, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 13, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 19, "y": 5 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 1, "y": 9 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 11, "y": 11 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 7, "y": 17 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 5, "y": 5 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 17, "y": 11 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 9, "y": 19 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 7, "y": 1 }, "itemType": "key", "requiredForGate": "gate-58-1" },
+    { "position": { "x": 13, "y": 5 }, "itemType": "key", "requiredForGate": "gate-58-2" },
+    { "position": { "x": 3, "y": 11 }, "itemType": "key", "requiredForGate": "gate-58-3" },
+    { "position": { "x": 11, "y": 15 }, "itemType": "key", "requiredForGate": "gate-58-4" }
+  ],
+  "traps": [
+    { "position": { "x": 7, "y": 5 }, "group": 0 },
+    { "position": { "x": 11, "y": 7 }, "group": 1 },
+    { "position": { "x": 3, "y": 15 }, "group": 0 },
+    { "position": { "x": 17, "y": 13 }, "group": 1 }
+  ],
+  "waterCurrents": [
+    { "position": { "x": 9, "y": 7 }, "direction": "right", "strength": 1 },
+    { "position": { "x": 11, "y": 7 }, "direction": "right", "strength": 1 },
+    { "position": { "x": 7, "y": 13 }, "direction": "down", "strength": 2 }
+  ],
+  "fogZones": [
+    { "position": { "x": 5, "y": 7 } },
+    { "position": { "x": 7, "y": 7 } },
+    { "position": { "x": 5, "y": 9 } },
+    { "position": { "x": 7, "y": 9 } },
+    { "position": { "x": 13, "y": 11 } },
+    { "position": { "x": 15, "y": 11 } },
+    { "position": { "x": 13, "y": 13 } },
+    { "position": { "x": 15, "y": 13 } },
+    { "position": { "x": 9, "y": 15 } },
+    { "position": { "x": 11, "y": 15 } }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "level": 55,
+  "gridWidth": 17,
+  "gridHeight": 17,
+  "seed": 55001,
+  "difficultyTier": 7,
+  "startPosition": { "x": 1, "y": 1 },
+  "exitPosition": { "x": 15, "y": 15 },
+  "puzzleGates": [
+    { "id": "gate-55-1", "position": { "x": 5, "y": 5 }, "puzzleType": "imageToZhuyin", "difficulty": 7 },
+    { "id": "gate-55-2", "position": { "x": 11, "y": 7 }, "puzzleType": "comparison", "difficulty": 7 },
+    { "id": "gate-55-3", "position": { "x": 7, "y": 13 }, "puzzleType": "counting", "difficulty": 7 }
+  ],
+  "items": [
+    { "position": { "x": 1, "y": 3 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 9, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 15, "y": 3 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 3, "y": 11 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 13, "y": 13 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 5, "y": 9 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 11, "y": 15 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 15, "y": 11 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 3, "y": 3 }, "itemType": "key", "requiredForGate": "gate-55-1" },
+    { "position": { "x": 9, "y": 5 }, "itemType": "key", "requiredForGate": "gate-55-2" },
+    { "position": { "x": 5, "y": 11 }, "itemType": "key", "requiredForGate": "gate-55-3" }
+  ],
+  "fogZones": [
+    { "position": { "x": 3, "y": 7 } },
+    { "position": { "x": 5, "y": 7 } },
+    { "position": { "x": 3, "y": 9 } },
+    { "position": { "x": 9, "y": 9 } },
+    { "position": { "x": 11, "y": 9 } },
+    { "position": { "x": 9, "y": 11 } },
+    { "position": { "x": 11, "y": 11 } },
+    { "position": { "x": 13, "y": 5 } },
+    { "position": { "x": 13, "y": 7 } },
+    { "position": { "x": 15, "y": 7 } }
+  ]
+}

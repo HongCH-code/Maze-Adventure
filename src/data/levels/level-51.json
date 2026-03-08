@@ -1,0 +1,22 @@
+{
+  "level": 51,
+  "gridWidth": 15,
+  "gridHeight": 15,
+  "seed": 51001,
+  "difficultyTier": 7,
+  "startPosition": { "x": 1, "y": 1 },
+  "exitPosition": { "x": 13, "y": 13 },
+  "puzzleGates": [
+    { "id": "gate-51-1", "position": { "x": 5, "y": 3 }, "puzzleType": "zhuyinToChar", "difficulty": 7 },
+    { "id": "gate-51-2", "position": { "x": 9, "y": 7 }, "puzzleType": "addition", "difficulty": 7 }
+  ],
+  "items": [
+    { "position": { "x": 3, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 11, "y": 3 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 7, "y": 9 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 1, "y": 5 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 13, "y": 11 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 3, "y": 3 }, "itemType": "key", "requiredForGate": "gate-51-1" },
+    { "position": { "x": 7, "y": 5 }, "itemType": "key", "requiredForGate": "gate-51-2" }
+  ]
+}

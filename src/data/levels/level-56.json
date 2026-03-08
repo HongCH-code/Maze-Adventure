@@ -1,0 +1,31 @@
+{
+  "level": 56,
+  "gridWidth": 19,
+  "gridHeight": 19,
+  "seed": 56001,
+  "difficultyTier": 7,
+  "startPosition": { "x": 1, "y": 1 },
+  "exitPosition": { "x": 17, "y": 17 },
+  "puzzleGates": [
+    { "id": "gate-56-1", "position": { "x": 7, "y": 3 }, "puzzleType": "clockReading", "difficulty": 7 },
+    { "id": "gate-56-2", "position": { "x": 13, "y": 9 }, "puzzleType": "coinCounting", "difficulty": 7 },
+    { "id": "gate-56-3", "position": { "x": 5, "y": 15 }, "puzzleType": "twoDigitAdd", "difficulty": 7 }
+  ],
+  "items": [
+    { "position": { "x": 3, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 11, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 17, "y": 5 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 1, "y": 9 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 9, "y": 13 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 5, "y": 7 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 15, "y": 11 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 11, "y": 17 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 5, "y": 1 }, "itemType": "key", "requiredForGate": "gate-56-1" },
+    { "position": { "x": 11, "y": 7 }, "itemType": "key", "requiredForGate": "gate-56-2" },
+    { "position": { "x": 3, "y": 13 }, "itemType": "key", "requiredForGate": "gate-56-3" }
+  ],
+  "waterCurrents": [
+    { "position": { "x": 9, "y": 5 }, "direction": "right", "strength": 1 },
+    { "position": { "x": 11, "y": 5 }, "direction": "right", "strength": 1 }
+  ]
+}
