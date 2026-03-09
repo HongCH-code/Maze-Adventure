@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { profileManager, UserProfile } from "../systems/ProfileManager";
 import { createMobileInput, removeMobileInput } from "../systems/MobileInput";
+import { TOTAL_LEVELS } from "./LevelSelectScene";
 
 export class ProfileSelectScene extends Phaser.Scene {
   private isNaming = false;
@@ -98,7 +99,7 @@ export class ProfileSelectScene extends Phaser.Scene {
       const completed = profileManager.getCompletedCount(slot);
       const highest = profileManager.getHighestLevel(slot);
       this.add
-        .text(cx, y + 140, `已過 ${completed}/50 關`, {
+        .text(cx, y + 140, `已過 ${completed}/${TOTAL_LEVELS} 關`, {
           fontSize: "16px",
           color: "#aabbcc",
           fontFamily: "Arial",

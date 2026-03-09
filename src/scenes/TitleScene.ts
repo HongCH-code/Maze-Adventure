@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { profileManager } from "../systems/ProfileManager";
+import { TOTAL_LEVELS } from "./LevelSelectScene";
 
 export class TitleScene extends Phaser.Scene {
   constructor() {
@@ -34,7 +35,7 @@ export class TitleScene extends Phaser.Scene {
       const slot = profileManager.getActiveSlot()!;
       const completed = profileManager.getCompletedCount(slot);
       this.add
-        .text(width / 2, height * 0.38, `${profile.name}　(${completed}/50 關)`, {
+        .text(width / 2, height * 0.38, `${profile.name}　(${completed}/${TOTAL_LEVELS} 關)`, {
           fontSize: "18px",
           color: "#ffcc00",
           fontFamily: "Arial",
