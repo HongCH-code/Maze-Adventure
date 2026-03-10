@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { ProgressManager } from "../systems/ProgressManager";
+import { music } from "../systems/MusicManager";
 
 export const TOTAL_LEVELS = 65;
 const COLS = 5;
@@ -21,6 +22,7 @@ export class LevelSelectScene extends Phaser.Scene {
   }
 
   create(): void {
+    music.play("bgm_menu");
     this.progressManager = new ProgressManager();
     const { width } = this.cameras.main;
 

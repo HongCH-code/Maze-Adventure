@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { music } from "../systems/MusicManager";
 
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -35,11 +36,23 @@ export class BootScene extends Phaser.Scene {
       loadingText.destroy();
     });
 
+    // Load image assets
+    this.load.image("player_img", "image/game-role.png");
+    this.load.image("start_img", "image/Start.png");
+    this.load.image("exit_img", "image/end-unlock.png");
+    this.load.image("exit_locked_img", "image/end-lock.png");
+
+    // Load audio assets
+    this.load.audio("bgm_menu", "Audio/Main-menu.mp3");
+    this.load.audio("bgm_standard", "Audio/Standard-theme.mp3");
+    this.load.audio("bgm_ocean", "Audio/Ocean-theme.mp3");
+
     // Generate placeholder textures programmatically
     this.generatePlaceholderTextures();
   }
 
   create(): void {
+    music.bind(this);
     this.scene.start("ProfileSelectScene");
   }
 

@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { profileManager } from "../systems/ProfileManager";
 import { TOTAL_LEVELS } from "./LevelSelectScene";
+import { music } from "../systems/MusicManager";
 
 export class TitleScene extends Phaser.Scene {
   constructor() {
@@ -10,6 +11,9 @@ export class TitleScene extends Phaser.Scene {
   create(): void {
     const { width, height } = this.cameras.main;
     const profile = profileManager.getActiveProfile();
+
+    // Menu background music
+    music.play("bgm_menu");
 
     // Title
     this.add

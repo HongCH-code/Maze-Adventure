@@ -4,6 +4,7 @@ import {
   LeaderboardEntry,
 } from "../systems/LeaderboardManager";
 import { createMobileInput, removeMobileInput } from "../systems/MobileInput";
+import { music } from "../systems/MusicManager";
 
 interface LevelCompleteData {
   level: number;
@@ -38,6 +39,7 @@ export class LevelCompleteScene extends Phaser.Scene {
   }
 
   create(): void {
+    music.play("bgm_menu");
     this.lb = new LeaderboardManager();
     const d = this.levelResult;
 

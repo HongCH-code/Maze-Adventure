@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { MazeGenerator } from "../systems/MazeGenerator";
 import { sfx } from "../systems/SoundManager";
+import { music } from "../systems/MusicManager";
 import { ProgressManager } from "../systems/ProgressManager";
 import { InputManager } from "../systems/InputManager";
 import {
@@ -291,7 +292,7 @@ export class GameScene extends Phaser.Scene {
 
         let textureKey = isOcean ? "ocean_wall" : "wall";
         if (cell.type === "path") textureKey = isOcean ? "ocean_path" : "path";
-        else if (cell.type === "start") textureKey = "start";
+        else if (cell.type === "start") textureKey = isOcean ? "ocean_path" : "path";
         else if (cell.type === "exit") textureKey = isOcean ? "ocean_path" : "path";
 
         this.add.image(px, py, textureKey).setDisplaySize(TILE_SIZE, TILE_SIZE);
@@ -580,11 +581,19 @@ export class GameScene extends Phaser.Scene {
     // Determine if exit should be locked (stars exist = must collect all)
     this.exitLocked = this.totalItems.stars > 0;
 
+    // Start sprite overlay
+    const startPx = this.offsetX + this.startGridPos.x * TILE_SIZE + TILE_SIZE / 2;
+    const startPy = this.offsetY + this.startGridPos.y * TILE_SIZE + TILE_SIZE / 2;
+    this.add
+      .image(startPx, startPy, "start_img")
+      .setDisplaySize(TILE_SIZE, TILE_SIZE)
+      .setDepth(1);
+
     // Exit sprite overlay
     const exitPx = this.offsetX + this.exitPos.x * TILE_SIZE + TILE_SIZE / 2;
     const exitPy = this.offsetY + this.exitPos.y * TILE_SIZE + TILE_SIZE / 2;
     this.exitSprite = this.add
-      .image(exitPx, exitPy, this.exitLocked ? "exit_locked" : "exit")
+      .image(exitPx, exitPy, this.exitLocked ? "exit_locked_img" : "exit_img")
       .setDisplaySize(TILE_SIZE, TILE_SIZE)
       .setDepth(1);
 
@@ -595,8 +604,8 @@ export class GameScene extends Phaser.Scene {
     const playerPy =
       this.offsetY + this.startGridPos.y * TILE_SIZE + TILE_SIZE / 2;
     this.player = this.add
-      .image(playerPx, playerPy, "player")
-      .setDisplaySize(TILE_SIZE * 0.7, TILE_SIZE * 0.7)
+      .image(playerPx, playerPy, "player_img")
+      .setDisplaySize(TILE_SIZE * 0.8, TILE_SIZE * 0.8)
       .setDepth(2);
     this.player.setData("origScaleX", this.player.scaleX);
     this.player.setData("origScaleY", this.player.scaleY);
@@ -676,6 +685,9 @@ export class GameScene extends Phaser.Scene {
         },
       });
     }
+
+    // Background music
+    music.play(isOcean ? "bgm_ocean" : "bgm_standard");
   }
 
   update(): void {
@@ -1011,7 +1023,7 @@ export class GameScene extends Phaser.Scene {
 
   private updateExitSprite(): void {
     if (!this.exitSprite) return;
-    this.exitSprite.setTexture("exit");
+    this.exitSprite.setTexture("exit_img");
     // Flash animation to draw attention
     this.tweens.add({
       targets: this.exitSprite,
