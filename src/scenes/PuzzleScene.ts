@@ -14,6 +14,7 @@ export class PuzzleScene extends Phaser.Scene {
   private puzzleManager!: PuzzleManager;
   private puzzle!: Puzzle;
   private isAnswering = false;
+  private wrongCount = 0;
 
   constructor() {
     super({ key: "PuzzleScene" });
@@ -22,6 +23,7 @@ export class PuzzleScene extends Phaser.Scene {
   init(data: PuzzleSceneData): void {
     this.sceneData = data;
     this.isAnswering = false;
+    this.wrongCount = 0;
   }
 
   create(): void {
@@ -166,15 +168,18 @@ export class PuzzleScene extends Phaser.Scene {
         this.scene.stop();
       });
     } else {
-      // Incorrect answer — shake and retry
+      // Incorrect answer
       sfx.wrongAnswer();
+      this.wrongCount++;
       btnBg.clear();
       btnBg.fillStyle(0xcc3333, 1);
       btnBg.fillRoundedRect(bx, by, btnW, btnH, 10);
 
       const { width, height } = this.cameras.main;
+      const isLastChance = this.wrongCount >= 2;
+      const msg = isLastChance ? "換一題！" : "再試一次！";
       const tryAgainText = this.add
-        .text(width / 2, height / 2 - 120, "再試一次！", {
+        .text(width / 2, height / 2 - 120, msg, {
           fontSize: "28px",
           color: "#ffcc00",
           fontFamily: "Arial",
@@ -192,12 +197,16 @@ export class PuzzleScene extends Phaser.Scene {
         onComplete: () => tryAgainText.destroy(),
       });
 
-      // Reset button after delay
-      this.time.delayedCall(600, () => {
-        btnBg.clear();
-        btnBg.fillStyle(0x4a90d9, 1);
-        btnBg.fillRoundedRect(bx, by, btnW, btnH, 10);
-        this.isAnswering = false;
+      // After 2 wrong answers, generate a new question; otherwise allow retry
+      this.time.delayedCall(isLastChance ? 900 : 600, () => {
+        if (isLastChance) {
+          this.scene.restart(this.sceneData);
+        } else {
+          btnBg.clear();
+          btnBg.fillStyle(0x4a90d9, 1);
+          btnBg.fillRoundedRect(bx, by, btnW, btnH, 10);
+          this.isAnswering = false;
+        }
       });
     }
   }
