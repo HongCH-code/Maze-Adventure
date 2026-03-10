@@ -14,6 +14,7 @@ export default defineConfig({
       registerType: "autoUpdate",
       workbox: {
         globPatterns: ["**/*.{js,css,html,png,json,mp3,ogg,wav}"],
+        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024, // 6 MB for audio files
       },
       manifest: {
         name: "Maze Adventure",
