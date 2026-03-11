@@ -9,6 +9,9 @@ export class InputManager {
   private onDirection: (dir: Direction) => void;
   private lastInputTime = 0;
   private inputCooldown = 150; // ms debounce
+  private repeatTimer?: ReturnType<typeof setInterval>;
+  private repeatDelay = 400; // ms before repeat starts
+  private repeatInterval = 120; // ms between repeats
 
   constructor(scene: Phaser.Scene, onDirection: (dir: Direction) => void) {
     this.scene = scene;
@@ -72,28 +75,33 @@ export class InputManager {
         .setInteractive();
 
       container.on("pointerdown", () => {
-        const now = Date.now();
-        if (now - this.lastInputTime < this.inputCooldown) return;
-        this.lastInputTime = now;
-
         bg.clear();
         bg.fillStyle(0xffffff, 0.5);
         bg.fillRoundedRect(-btnSize / 2, -btnSize / 2, btnSize, btnSize, 8);
 
+        // Fire immediately
         this.onDirection(dir);
+
+        // Stop any existing repeat
+        this.stopRepeat();
+
+        // After a delay, start repeating
+        this.repeatTimer = setTimeout(() => {
+          this.repeatTimer = setInterval(() => {
+            this.onDirection(dir);
+          }, this.repeatInterval) as unknown as ReturnType<typeof setTimeout>;
+        }, this.repeatDelay) as ReturnType<typeof setTimeout>;
       });
 
-      container.on("pointerup", () => {
+      const stopHold = () => {
+        this.stopRepeat();
         bg.clear();
         bg.fillStyle(0xffffff, 0.25);
         bg.fillRoundedRect(-btnSize / 2, -btnSize / 2, btnSize, btnSize, 8);
-      });
+      };
 
-      container.on("pointerout", () => {
-        bg.clear();
-        bg.fillStyle(0xffffff, 0.25);
-        bg.fillRoundedRect(-btnSize / 2, -btnSize / 2, btnSize, btnSize, 8);
-      });
+      container.on("pointerup", stopHold);
+      container.on("pointerout", stopHold);
 
       this.dpadButtons.push(container);
     }
@@ -120,7 +128,16 @@ export class InputManager {
     }
   }
 
+  private stopRepeat(): void {
+    if (this.repeatTimer != null) {
+      clearTimeout(this.repeatTimer);
+      clearInterval(this.repeatTimer);
+      this.repeatTimer = undefined;
+    }
+  }
+
   destroy(): void {
+    this.stopRepeat();
     for (const btn of this.dpadButtons) {
       btn.destroy();
     }
