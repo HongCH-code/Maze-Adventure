@@ -5,6 +5,7 @@ import {
 } from "../systems/LeaderboardManager";
 import { createMobileInput, removeMobileInput } from "../systems/MobileInput";
 import { music } from "../systems/MusicManager";
+import { TOTAL_LEVELS } from "./LevelSelectScene";
 
 interface LevelCompleteData {
   level: number;
@@ -42,6 +43,12 @@ export class LevelCompleteScene extends Phaser.Scene {
     music.play("bgm_menu");
     this.lb = new LeaderboardManager();
     const d = this.levelResult;
+
+    // Clean up HTML input when scene shuts down
+    this.events.once("shutdown", () => {
+      removeMobileInput(this.htmlInput);
+      this.htmlInput = null;
+    });
 
     if (this.lb.qualifies(d.level, d.timeSeconds, d.coinsCollected)) {
       this.showNameInput();
@@ -268,7 +275,7 @@ export class LevelCompleteScene extends Phaser.Scene {
     }
 
     // Navigation buttons
-    if (d.level < 50) {
+    if (d.level < TOTAL_LEVELS) {
       const nextBtn = this.add
         .text(width / 2, height * 0.78, "下一關", {
           fontSize: "24px",
