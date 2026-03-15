@@ -57,7 +57,7 @@ export class PuzzleScene extends Phaser.Scene {
 
     // Question text — use smaller font for counting puzzles with emoji grids or text-heavy puzzle types
     const isCounting = this.puzzle.puzzleType === "counting";
-    const isTextPuzzle = ["zhuyinToChar", "imageToZhuyin", "lifeSafety", "oceanCreature"].includes(this.puzzle.puzzleType);
+    const isTextPuzzle = ["zhuyinToChar", "imageToZhuyin", "lifeSafety", "oceanCreature", "directionPuzzle", "patternSequence"].includes(this.puzzle.puzzleType);
     const fontSize = isCounting || isTextPuzzle ? "26px" : "36px";
     this.add
       .text(width / 2, panelY + 60, this.puzzle.question, {

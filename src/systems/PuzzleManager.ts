@@ -514,6 +514,46 @@ const generators: Partial<Record<PuzzleType, PuzzleGenerator>> = {
       puzzleType: "lifeSafety",
     };
   },
+
+  directionPuzzle: (_tier) => {
+    const scenarios = [
+      { q: "🐒 猴子在左邊，香蕉在右邊，猴子要往哪邊走？", a: "右邊", wrong: ["左邊", "上面", "下面"] },
+      { q: "🦜 鸚鵡在上面，樹在下面，鸚鵡要往哪邊飛？", a: "下面", wrong: ["上面", "左邊", "右邊"] },
+      { q: "🐍 蛇在右邊，洞穴在左邊，蛇要往哪邊爬？", a: "左邊", wrong: ["右邊", "上面", "下面"] },
+      { q: "🐆 花豹在下面，食物在上面，花豹要往哪邊跑？", a: "上面", wrong: ["下面", "左邊", "右邊"] },
+      { q: "🐊 鱷魚要從河的左邊游到右邊，要往哪邊游？", a: "右邊", wrong: ["左邊", "上面", "下面"] },
+      { q: "🕷️ 蜘蛛在網的上面，蟲子在下面，蜘蛛要往哪邊爬？", a: "下面", wrong: ["上面", "左邊", "右邊"] },
+      { q: "🐒 猴子在樹的右邊，想回到左邊的家，要往哪邊走？", a: "左邊", wrong: ["右邊", "上面", "下面"] },
+      { q: "🦎 蜥蜴在石頭下面，太陽在上面，要往哪邊曬太陽？", a: "上面", wrong: ["下面", "左邊", "右邊"] },
+      { q: "⬆️ 是哪個方向？", a: "上面", wrong: ["下面", "左邊", "右邊"] },
+      { q: "⬇️ 是哪個方向？", a: "下面", wrong: ["上面", "左邊", "右邊"] },
+      { q: "⬅️ 是哪個方向？", a: "左邊", wrong: ["右邊", "上面", "下面"] },
+      { q: "➡️ 是哪個方向？", a: "右邊", wrong: ["左邊", "上面", "下面"] },
+    ];
+    const s = pickRandom(scenarios);
+    const choices = shuffleArray([s.a, ...s.wrong]);
+    return { question: s.q, correctAnswer: s.a, choices, puzzleType: "directionPuzzle" as PuzzleType };
+  },
+
+  patternSequence: (_tier) => {
+    const patterns = [
+      { seq: "🐒 🐍 🐒 🐍 🐒 ？", a: "🐍", wrong: ["🐒", "🦎", "🐆"] },
+      { seq: "🌺 🌿 🌺 🌿 🌺 ？", a: "🌿", wrong: ["🌺", "🌸", "🍀"] },
+      { seq: "🔴 🔵 🔴 🔵 🔴 ？", a: "🔵", wrong: ["🔴", "🟢", "🟡"] },
+      { seq: "🐆 🐆 🐍 🐆 🐆 ？", a: "🐍", wrong: ["🐆", "🐒", "🦎"] },
+      { seq: "⭐ ⭐ 🌙 ⭐ ⭐ ？", a: "🌙", wrong: ["⭐", "☀️", "💫"] },
+      { seq: "🍎 🍌 🍎 🍌 🍎 ？", a: "🍌", wrong: ["🍎", "🍊", "🍇"] },
+      { seq: "1️⃣ 2️⃣ 3️⃣ 4️⃣ 5️⃣ ？", a: "6️⃣", wrong: ["7️⃣", "5️⃣", "1️⃣"] },
+      { seq: "🐒 🐒 🐍 🐒 🐒 ？", a: "🐍", wrong: ["🐒", "🐆", "🦜"] },
+      { seq: "🟢 🟡 🔴 🟢 🟡 ？", a: "🔴", wrong: ["🟢", "🟡", "🔵"] },
+      { seq: "🌲 🌴 🌲 🌴 🌲 ？", a: "🌴", wrong: ["🌲", "🌳", "🎄"] },
+      { seq: "👆 👇 👆 👇 👆 ？", a: "👇", wrong: ["👆", "👈", "👉"] },
+      { seq: "🐊 🐊 🐊 🦜 🐊 🐊 🐊 ？", a: "🦜", wrong: ["🐊", "🐍", "🐒"] },
+    ];
+    const p = pickRandom(patterns);
+    const choices = shuffleArray([p.a, ...p.wrong]);
+    return { question: `找規律：\n${p.seq}`, correctAnswer: p.a, choices, puzzleType: "patternSequence" as PuzzleType };
+  },
 };
 
 export class PuzzleManager {
