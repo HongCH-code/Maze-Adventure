@@ -640,65 +640,48 @@ export class BattleScene extends Phaser.Scene {
     this.setDodgeButtonsVisible(false);
     this.dodgeTimerBar.clear();
     this.indicatorGraphics.clear();
+    this.barGraphics.clear();
+    this.instructionText.setText("");
+
+    const { width } = this.cameras.main;
 
     if (won) {
       sfx.battleWin();
-      this.statusText.setText("勝利！");
+      this.statusText.setText("🎉 勝利！");
       this.feedbackText.setStyle({ color: "#ffff44" });
-      this.feedbackText.setText("🎉 擊敗了敵人！");
+      this.feedbackText.setText("擊敗了敵人！");
     } else {
       sfx.battleLose();
-      this.statusText.setText("戰敗！");
+      this.statusText.setText("💀 戰敗！");
       this.feedbackText.setStyle({ color: "#ff4444" });
       this.feedbackText.setText("你被擊倒了……");
     }
 
-    // Result buttons
-    const { width, height } = this.cameras.main;
-    const btnY = height / 2 + 160;
+    // Single result button — win: "繼續冒險", lose: "回到起點"
+    const btnLabel = won ? "繼續冒險" : "回到起點";
+    const btnColor = won ? 0x336633 : 0x663333;
+    const btnBorder = won ? 0x66ff66 : 0xff6666;
+    const btnY = this.barY + 20;
 
-    const continueBtn = this.add.graphics();
-    continueBtn.fillStyle(0x336633, 1);
-    continueBtn.fillRoundedRect(width / 2 - 180, btnY - 20, 160, 44, 10);
-    continueBtn.lineStyle(2, 0x66ff66, 1);
-    continueBtn.strokeRoundedRect(width / 2 - 180, btnY - 20, 160, 44, 10);
+    const btn = this.add.graphics();
+    btn.fillStyle(btnColor, 1);
+    btn.fillRoundedRect(width / 2 - 90, btnY, 180, 50, 10);
+    btn.lineStyle(2, btnBorder, 1);
+    btn.strokeRoundedRect(width / 2 - 90, btnY, 180, 50, 10);
 
-    const continueLabel = this.add
-      .text(width / 2 - 100, btnY + 2, "繼續冒險", {
-        fontSize: "20px",
+    this.add
+      .text(width / 2, btnY + 25, btnLabel, {
+        fontSize: "22px",
         color: "#ffffff",
         fontFamily: "Arial",
         fontStyle: "bold",
       })
       .setOrigin(0.5);
 
-    const continueZone = this.add
-      .zone(width / 2 - 100, btnY + 2, 160, 44)
-      .setInteractive({ useHandCursor: true });
-    continueZone.on("pointerdown", () => this.closeBattle(won));
-
-    const retryBtn = this.add.graphics();
-    retryBtn.fillStyle(0x663333, 1);
-    retryBtn.fillRoundedRect(width / 2 + 20, btnY - 20, 160, 44, 10);
-    retryBtn.lineStyle(2, 0xff6666, 1);
-    retryBtn.strokeRoundedRect(width / 2 + 20, btnY - 20, 160, 44, 10);
-
-    const retryLabel = this.add
-      .text(width / 2 + 100, btnY + 2, "回到起點", {
-        fontSize: "20px",
-        color: "#ffffff",
-        fontFamily: "Arial",
-        fontStyle: "bold",
-      })
-      .setOrigin(0.5);
-
-    const retryZone = this.add
-      .zone(width / 2 + 100, btnY + 2, 160, 44)
-      .setInteractive({ useHandCursor: true });
-    retryZone.on("pointerdown", () => this.closeBattle(won));
-
-    void continueLabel;
-    void retryLabel;
+    this.add
+      .zone(width / 2, btnY + 25, 180, 50)
+      .setInteractive({ useHandCursor: true })
+      .on("pointerdown", () => this.closeBattle(won));
   }
 
   private closeBattle(won: boolean): void {
