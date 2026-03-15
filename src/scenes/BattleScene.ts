@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { AnimalType } from "../types";
+import { AnimalType, Direction } from "../types";
 import { sfx } from "../systems/SoundManager";
 
 interface BattleSceneData {
@@ -14,7 +14,6 @@ interface BattleSceneData {
 }
 
 type BattlePhase = "player-attack" | "animal-attack" | "result";
-type Direction = "up" | "down" | "left" | "right";
 
 const ANIMAL_EMOJI: Record<AnimalType, string> = {
   snake: "🐍",
@@ -49,6 +48,8 @@ const DIR_LABEL: Record<Direction, string> = {
   left: "左",
   right: "右",
 };
+
+const DODGE_BTN_SIZE = 70;
 
 export class BattleScene extends Phaser.Scene {
   private sceneData!: BattleSceneData;
@@ -87,7 +88,7 @@ export class BattleScene extends Phaser.Scene {
     zone: Phaser.GameObjects.Zone;
     dir: Direction;
   }> = [];
-  private dodgeContainer!: Phaser.GameObjects.Container;
+
 
   // Dodge phase state
   private currentAttackDirections: Direction[] = [];
@@ -233,7 +234,6 @@ export class BattleScene extends Phaser.Scene {
     this.attackBtnZone.on("pointerdown", () => this.onAttackPressed());
 
     // Dodge direction buttons (hidden initially)
-    this.dodgeContainer = this.add.container(0, 0);
     this.createDodgeButtons();
 
     // Draw initial bar
@@ -312,7 +312,7 @@ export class BattleScene extends Phaser.Scene {
     const { width, height } = this.cameras.main;
     const cx = width / 2;
     const cy = height / 2 + 80;
-    const btnSize = 70;
+    const bs = DODGE_BTN_SIZE;
     const gap = 80;
 
     const positions: Record<Direction, { x: number; y: number }> = {
@@ -328,9 +328,9 @@ export class BattleScene extends Phaser.Scene {
       const pos = positions[dir];
       const bg = this.add.graphics();
       bg.fillStyle(0x335599, 1);
-      bg.fillRoundedRect(pos.x - btnSize / 2, pos.y - btnSize / 2, btnSize, btnSize, 10);
+      bg.fillRoundedRect(pos.x - bs / 2, pos.y - bs / 2, bs, bs, 10);
       bg.lineStyle(2, 0x88aaff, 1);
-      bg.strokeRoundedRect(pos.x - btnSize / 2, pos.y - btnSize / 2, btnSize, btnSize, 10);
+      bg.strokeRoundedRect(pos.x - bs / 2, pos.y - bs / 2, bs, bs, 10);
 
       const label = this.add
         .text(pos.x, pos.y, `${DIR_ARROW[dir]}\n${DIR_LABEL[dir]}`, {
@@ -343,23 +343,23 @@ export class BattleScene extends Phaser.Scene {
         .setOrigin(0.5);
 
       const zone = this.add
-        .zone(pos.x, pos.y, btnSize, btnSize)
+        .zone(pos.x, pos.y, bs, bs)
         .setInteractive({ useHandCursor: true });
 
       zone.on("pointerdown", () => this.onDodgePressed(dir));
       zone.on("pointerover", () => {
         bg.clear();
         bg.fillStyle(0x4477bb, 1);
-        bg.fillRoundedRect(pos.x - btnSize / 2, pos.y - btnSize / 2, btnSize, btnSize, 10);
+        bg.fillRoundedRect(pos.x - bs / 2, pos.y - bs / 2, bs, bs, 10);
         bg.lineStyle(2, 0xaaccff, 1);
-        bg.strokeRoundedRect(pos.x - btnSize / 2, pos.y - btnSize / 2, btnSize, btnSize, 10);
+        bg.strokeRoundedRect(pos.x - bs / 2, pos.y - bs / 2, bs, bs, 10);
       });
       zone.on("pointerout", () => {
         bg.clear();
         bg.fillStyle(0x335599, 1);
-        bg.fillRoundedRect(pos.x - btnSize / 2, pos.y - btnSize / 2, btnSize, btnSize, 10);
+        bg.fillRoundedRect(pos.x - bs / 2, pos.y - bs / 2, bs, bs, 10);
         bg.lineStyle(2, 0x88aaff, 1);
-        bg.strokeRoundedRect(pos.x - btnSize / 2, pos.y - btnSize / 2, btnSize, btnSize, 10);
+        bg.strokeRoundedRect(pos.x - bs / 2, pos.y - bs / 2, bs, bs, 10);
       });
 
       this.dodgeBtns.push({ bg, label, zone, dir });
@@ -448,26 +448,27 @@ export class BattleScene extends Phaser.Scene {
     }
 
     const attackDir = this.currentAttackDirections[this.dodgeIndex];
-    const dodgeDir = this.getOppositeDirection(attackDir);
 
     this.statusText.setText(
       `攻擊從【${DIR_LABEL[attackDir]}】方向來！按其他方向閃避！`
     );
 
     // Highlight the attack direction as danger
+    const bs = DODGE_BTN_SIZE;
+    const half = bs / 2;
     this.dodgeBtns.forEach(({ bg, dir }) => {
       const pos = this.getDodgeBtnPos(dir);
       bg.clear();
       if (dir === attackDir) {
         bg.fillStyle(0xcc3333, 1);
-        bg.fillRoundedRect(pos.x - 35, pos.y - 35, 70, 70, 10);
+        bg.fillRoundedRect(pos.x - half, pos.y - half, bs, bs, 10);
         bg.lineStyle(2, 0xff6666, 1);
-        bg.strokeRoundedRect(pos.x - 35, pos.y - 35, 70, 70, 10);
+        bg.strokeRoundedRect(pos.x - half, pos.y - half, bs, bs, 10);
       } else {
         bg.fillStyle(0x335599, 1);
-        bg.fillRoundedRect(pos.x - 35, pos.y - 35, 70, 70, 10);
+        bg.fillRoundedRect(pos.x - half, pos.y - half, bs, bs, 10);
         bg.lineStyle(2, 0x88aaff, 1);
-        bg.strokeRoundedRect(pos.x - 35, pos.y - 35, 70, 70, 10);
+        bg.strokeRoundedRect(pos.x - half, pos.y - half, bs, bs, 10);
       }
     });
 
@@ -486,17 +487,6 @@ export class BattleScene extends Phaser.Scene {
       this.onDodgeFailed();
     });
 
-    void dodgeDir; // available but player can press any non-attack direction
-  }
-
-  private getOppositeDirection(dir: Direction): Direction {
-    const opp: Record<Direction, Direction> = {
-      up: "down",
-      down: "up",
-      left: "right",
-      right: "left",
-    };
-    return opp[dir];
   }
 
   private getDodgeBtnPos(dir: Direction): { x: number; y: number } {

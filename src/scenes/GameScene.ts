@@ -634,7 +634,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     // Place vine bridges (jungle theme)
-    const vineBridges: VineBridgeData[] = (this.levelData as any).vineBridges || [];
+    const vineBridges = this.levelData.vineBridges ?? [];
     for (const bridge of vineBridges) {
       const gridPos = this.pickUniqueCell(walkableCells, occupied, bridge.position);
       if (!gridPos) continue;
@@ -653,7 +653,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     // Place patrol animals (jungle theme)
-    const patrolAnimals: PatrolAnimalData[] = (this.levelData as any).patrolAnimals || [];
+    const patrolAnimals = this.levelData.patrolAnimals ?? [];
     for (const animal of patrolAnimals) {
       const startPos = this.pickUniqueCell(walkableCells, occupied, animal.startPosition);
       if (!startPos) continue;
@@ -679,7 +679,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     // Place boss at exit (if level has boss data)
-    const bossData = (this.levelData as any).boss;
+    const bossData = this.levelData.boss;
     if (bossData) {
       const bossX = this.exitPos.x;
       const bossY = this.exitPos.y;
@@ -716,7 +716,8 @@ export class GameScene extends Phaser.Scene {
       });
     }
 
-    // Listen for battle results
+    // Listen for battle results (off first to prevent accumulation on restart)
+    this.events.off("battle-result");
     this.events.on("battle-result", (result: { won: boolean; animalId: string; isBoss: boolean }) => {
       this.handleBattleResult(result);
     });
@@ -800,7 +801,8 @@ export class GameScene extends Phaser.Scene {
 
     pauseBtn.on("pointerdown", () => this.togglePause());
 
-    // Listen for puzzle completion
+    // Listen for puzzle completion (off first to prevent accumulation on restart)
+    this.events.off("gate-unlocked");
     this.events.on("gate-unlocked", (cellKey: string) => {
       this.handleGateUnlocked(cellKey);
     });
@@ -964,7 +966,7 @@ export class GameScene extends Phaser.Scene {
                 this.grid[by][bx].type = "wall";
                 const wpx = this.offsetX + bx * TILE_SIZE + TILE_SIZE / 2;
                 const wpy = this.offsetY + by * TILE_SIZE + TILE_SIZE / 2;
-                const wallTexture = this.isJungleLevel() ? "jungle_wall" : this.isOceanLevel() ? "ocean_wall" : "wall";
+                const wallTexture = this.getThemeTexture("wall", "ocean_wall", "jungle_wall");
                 this.add.image(wpx, wpy, wallTexture).setDisplaySize(TILE_SIZE, TILE_SIZE);
               }
             },
@@ -1085,7 +1087,7 @@ export class GameScene extends Phaser.Scene {
     // Check for water current — only push if NOT walking against the current
     const currentInfo = this.currentSprites.get(cellKey);
     if (currentInfo) {
-      const opposites: Record<string, string> = { up: "down", down: "up", left: "right", right: "left" };
+      const opposites: Record<Direction, Direction> = { up: "down", down: "up", left: "right", right: "left" };
       if (this.lastMoveDirection !== opposites[currentInfo.direction]) {
         this.handleWaterCurrent(currentInfo.direction, currentInfo.strength);
         return;
@@ -1095,7 +1097,7 @@ export class GameScene extends Phaser.Scene {
 
     // Check for exit
     if (cell.type === "exit" && !this.exitLocked) {
-      const bossData = (this.levelData as any).boss;
+      const bossData = this.levelData.boss;
       if (bossData && !this.bossDefeated) {
         this.isPaused = true;
         this.scene.launch("BattleScene", {
