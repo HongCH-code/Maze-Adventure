@@ -144,6 +144,34 @@ export class SoundManager {
     this.tone(784, 0.12, "sine", 0.2, 0.2);
     this.tone(1047, 0.35, "sine", 0.3, 0.3);
   }
+
+  battleHit(): void {
+    this.tone(400, 0.15, "sawtooth", 0.2);
+    this.noise(0.08, 0.15);
+    this.tone(300, 0.1, "square", 0.1, 0.1);
+  }
+
+  battleMiss(): void {
+    this.sweep(400, 200, 0.3, "sine", 0.15);
+  }
+
+  battleDodge(): void {
+    this.sweep(300, 600, 0.15, "sine", 0.15);
+    this.tone(700, 0.08, "sine", 0.1, 0.1);
+  }
+
+  battleWin(): void {
+    this.tone(523, 0.1, "sine", 0.25);
+    this.tone(659, 0.1, "sine", 0.25, 0.08);
+    this.tone(784, 0.1, "sine", 0.25, 0.16);
+    this.tone(1047, 0.3, "sine", 0.3, 0.24);
+  }
+
+  battleLose(): void {
+    this.tone(400, 0.2, "sawtooth", 0.2);
+    this.tone(300, 0.2, "sawtooth", 0.2, 0.15);
+    this.tone(200, 0.4, "sawtooth", 0.2, 0.3);
+  }
 }
 
 export const sfx = new SoundManager();

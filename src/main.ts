@@ -5,6 +5,7 @@ import { TitleScene } from "./scenes/TitleScene";
 import { LevelSelectScene } from "./scenes/LevelSelectScene";
 import { GameScene } from "./scenes/GameScene";
 import { PuzzleScene } from "./scenes/PuzzleScene";
+import { BattleScene } from "./scenes/BattleScene";
 import { LevelCompleteScene } from "./scenes/LevelCompleteScene";
 import { HowToPlayScene } from "./scenes/HowToPlayScene";
 
@@ -25,6 +26,7 @@ const config: Phaser.Types.Core.GameConfig = {
     LevelSelectScene,
     GameScene,
     PuzzleScene,
+    BattleScene,
     LevelCompleteScene,
     HowToPlayScene,
   ],
