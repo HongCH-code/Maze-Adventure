@@ -46,6 +46,7 @@ export class BootScene extends Phaser.Scene {
     this.load.audio("bgm_menu", "Audio/Main-menu.mp3");
     this.load.audio("bgm_standard", "Audio/Standard-theme.mp3");
     this.load.audio("bgm_ocean", "Audio/Ocean-theme.mp3");
+    this.load.audio("bgm_jungle", "Audio/Jungle-theme.mp3");
 
     // Generate placeholder textures programmatically
     this.generatePlaceholderTextures();
@@ -112,6 +113,18 @@ export class BootScene extends Phaser.Scene {
     this.createJellyfishTexture(s);
     this.createWaterCurrentTexture(s);
     this.createFogTexture(s);
+
+    // Jungle theme textures
+    this.createJungleWallTexture(s);
+    this.createJunglePathTexture(s);
+    this.createGemTexture(s);
+    this.createFruitTexture(s);
+    this.createTotemTexture(s);
+    this.createTreeHoleTexture(s);
+    this.createPatrolAnimalTexture(s);
+    this.createVineBridgeTexture(s);
+    this.createJungleTrapTexture(s);
+    this.createJungleFogTexture(s);
   }
 
   private createStartTexture(s: number): void {
@@ -474,6 +487,168 @@ export class BootScene extends Phaser.Scene {
     g.lineBetween(s * 0.85, s, s * 0.8, s * 0.5);
     g.lineBetween(s * 0.8, s * 0.5, s * 0.88, s * 0.15);
     g.generateTexture("fog", s, s);
+    g.destroy();
+  }
+
+  private createJungleWallTexture(s: number): void {
+    const g = this.add.graphics();
+    g.fillStyle(0x2d5a27, 1);
+    g.fillRect(0, 0, s, s);
+    g.lineStyle(1, 0x1e4a1e, 0.6);
+    g.lineBetween(0, s * 0.2, s, s * 0.25);
+    g.lineBetween(0, s * 0.5, s, s * 0.45);
+    g.lineBetween(0, s * 0.75, s, s * 0.8);
+    g.lineBetween(s * 0.35, 0, s * 0.3, s);
+    g.lineBetween(s * 0.7, 0, s * 0.75, s);
+    g.fillStyle(0x3d7a37, 0.5);
+    g.fillCircle(s * 0.15, s * 0.35, 3);
+    g.fillCircle(s * 0.8, s * 0.65, 2);
+    g.generateTexture("jungle_wall", s, s);
+    g.destroy();
+  }
+
+  private createJunglePathTexture(s: number): void {
+    const g = this.add.graphics();
+    g.fillStyle(0xa07b4f, 1);
+    g.fillRect(0, 0, s, s);
+    g.fillStyle(0x8b6b3f, 0.5);
+    g.fillCircle(s * 0.2, s * 0.3, 1.5);
+    g.fillCircle(s * 0.65, s * 0.15, 1);
+    g.fillCircle(s * 0.45, s * 0.7, 1.5);
+    g.fillCircle(s * 0.8, s * 0.55, 1);
+    g.fillCircle(s * 0.1, s * 0.85, 1);
+    g.generateTexture("jungle_path", s, s);
+    g.destroy();
+  }
+
+  private createGemTexture(s: number): void {
+    const g = this.add.graphics();
+    const size = Math.ceil(s * 0.7);
+    const cx = size / 2;
+    const cy = size / 2;
+    g.fillStyle(0x50c878, 1);
+    g.fillTriangle(cx, cy - size * 0.4, cx - size * 0.35, cy, cx + size * 0.35, cy);
+    g.fillTriangle(cx, cy + size * 0.35, cx - size * 0.35, cy, cx + size * 0.35, cy);
+    g.fillStyle(0x80e8a0, 0.6);
+    g.fillTriangle(cx, cy - size * 0.3, cx - size * 0.1, cy - size * 0.05, cx + size * 0.1, cy - size * 0.05);
+    g.generateTexture("gem", size, size);
+    g.destroy();
+  }
+
+  private createFruitTexture(s: number): void {
+    const g = this.add.graphics();
+    const size = Math.ceil(s * 0.5);
+    const cx = size / 2;
+    const cy = size / 2;
+    g.fillStyle(0xff8c00, 1);
+    g.fillCircle(cx, cy, size * 0.42);
+    g.fillStyle(0x228b22, 1);
+    g.fillTriangle(cx - 2, cy - size * 0.35, cx + 4, cy - size * 0.55, cx + 6, cy - size * 0.3);
+    g.generateTexture("fruit", size, size);
+    g.destroy();
+  }
+
+  private createTotemTexture(s: number): void {
+    const g = this.add.graphics();
+    const size = Math.ceil(s * 0.7);
+    g.fillStyle(0x8b7355, 1);
+    g.fillRect(size * 0.2, size * 0.1, size * 0.6, size * 0.8);
+    g.fillStyle(0x6b5335, 1);
+    g.fillCircle(size * 0.35, size * 0.35, size * 0.08);
+    g.fillCircle(size * 0.65, size * 0.35, size * 0.08);
+    g.fillRect(size * 0.3, size * 0.55, size * 0.4, size * 0.08);
+    g.fillStyle(0xffd700, 0.4);
+    g.fillCircle(size / 2, size * 0.35, size * 0.04);
+    g.generateTexture("totem", size, size);
+    g.destroy();
+  }
+
+  private createTreeHoleTexture(s: number): void {
+    const g = this.add.graphics();
+    const cx = s / 2;
+    const cy = s / 2;
+    g.fillStyle(0x5c4033, 1);
+    g.fillCircle(cx, cy, s * 0.42);
+    g.fillStyle(0x1a0f0a, 1);
+    g.fillCircle(cx, cy, s * 0.25);
+    g.lineStyle(2, 0x4a3020, 0.7);
+    g.strokeCircle(cx, cy, s * 0.35);
+    g.generateTexture("tree_hole", s, s);
+    g.destroy();
+  }
+
+  private createPatrolAnimalTexture(s: number): void {
+    const g = this.add.graphics();
+    g.fillStyle(0x4caf50, 1);
+    g.fillCircle(s * 0.3, s * 0.3, s * 0.12);
+    g.fillCircle(s * 0.5, s * 0.5, s * 0.12);
+    g.fillCircle(s * 0.7, s * 0.7, s * 0.12);
+    g.fillRect(s * 0.22, s * 0.25, s * 0.18, s * 0.15);
+    g.fillRect(s * 0.42, s * 0.45, s * 0.18, s * 0.15);
+    g.fillStyle(0xff0000, 1);
+    g.fillCircle(s * 0.25, s * 0.25, s * 0.04);
+    g.fillCircle(s * 0.35, s * 0.25, s * 0.04);
+    g.generateTexture("patrol_animal", s, s);
+    g.destroy();
+  }
+
+  private createVineBridgeTexture(s: number): void {
+    const g = this.add.graphics();
+    g.fillStyle(0xa07b4f, 1);
+    g.fillRect(0, 0, s, s);
+    g.lineStyle(2, 0x228b22, 0.8);
+    g.lineBetween(0, s * 0.3, s, s * 0.3);
+    g.lineBetween(0, s * 0.7, s, s * 0.7);
+    g.fillStyle(0x6b4226, 0.7);
+    g.fillRect(s * 0.1, s * 0.25, s * 0.15, s * 0.5);
+    g.fillRect(s * 0.4, s * 0.25, s * 0.15, s * 0.5);
+    g.fillRect(s * 0.7, s * 0.25, s * 0.15, s * 0.5);
+    g.generateTexture("vine_bridge", s, s);
+    g.destroy();
+  }
+
+  private createJungleTrapTexture(s: number): void {
+    const g = this.add.graphics();
+    const size = Math.ceil(s * 0.8);
+    const cx = size / 2;
+    const cy = size / 2;
+    g.fillStyle(0x2e7d32, 0.9);
+    g.fillCircle(cx, cy, size * 0.38);
+    g.fillStyle(0x1b5e20, 1);
+    const spikes = 8;
+    for (let i = 0; i < spikes; i++) {
+      const angle = (Math.PI * 2 * i) / spikes;
+      const ix = cx + Math.cos(angle) * size * 0.28;
+      const iy = cy + Math.sin(angle) * size * 0.28;
+      const ox = cx + Math.cos(angle) * size * 0.45;
+      const oy = cy + Math.sin(angle) * size * 0.45;
+      const pa = angle + Math.PI / 2;
+      const pw = size * 0.06;
+      g.fillTriangle(
+        ix + Math.cos(pa) * pw, iy + Math.sin(pa) * pw,
+        ix - Math.cos(pa) * pw, iy - Math.sin(pa) * pw,
+        ox, oy
+      );
+    }
+    g.lineStyle(2, 0xffeb3b, 0.8);
+    g.lineBetween(cx - size * 0.12, cy, cx + size * 0.12, cy);
+    g.lineBetween(cx, cy - size * 0.12, cx, cy + size * 0.12);
+    g.generateTexture("jungle_trap", size, size);
+    g.destroy();
+  }
+
+  private createJungleFogTexture(s: number): void {
+    const g = this.add.graphics();
+    g.fillStyle(0x1a3a1a, 0.8);
+    g.fillRect(0, 0, s, s);
+    g.lineStyle(1.5, 0x2d5a2d, 0.5);
+    g.beginPath();
+    g.arc(s * 0.3, s * 0.4, s * 0.15, 0, Math.PI, false);
+    g.strokePath();
+    g.beginPath();
+    g.arc(s * 0.7, s * 0.6, s * 0.12, Math.PI, 0, false);
+    g.strokePath();
+    g.generateTexture("jungle_fog", s, s);
     g.destroy();
   }
 
