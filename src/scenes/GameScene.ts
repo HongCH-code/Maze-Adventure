@@ -15,6 +15,9 @@ import {
   TrapData,
   WaterCurrentData,
   FogZoneData,
+  VineBridgeData,
+  PatrolAnimalData,
+  AnimalType,
 } from "../types";
 
 // Import all level JSONs statically for Vite bundling
@@ -214,6 +217,20 @@ export class GameScene extends Phaser.Scene {
   private fogSprites: Map<string, Phaser.GameObjects.Image> = new Map();
   private revealedFog: Set<string> = new Set();
 
+  // Vine bridge tracking
+  private vineBridgeSprites: Map<string, Phaser.GameObjects.Image> = new Map();
+  private collapsedBridges: Set<string> = new Set();
+
+  // Patrol animal tracking
+  private patrolAnimalSprites: Map<string, {
+    sprite: Phaser.GameObjects.Image;
+    data: PatrolAnimalData;
+    currentWaypoint: number;
+    gridPos: Position;
+  }> = new Map();
+  private defeatedAnimals: Set<string> = new Set();
+  private bossDefeated = false;
+
   constructor() {
     super({ key: "GameScene" });
   }
@@ -239,6 +256,11 @@ export class GameScene extends Phaser.Scene {
     this.lastMoveDirection = "right";
     this.fogSprites.clear();
     this.revealedFog.clear();
+    this.vineBridgeSprites.clear();
+    this.collapsedBridges.clear();
+    this.patrolAnimalSprites.clear();
+    this.defeatedAnimals.clear();
+    this.bossDefeated = false;
     this.exitLocked = false;
 
     if (!this.levelData) {
@@ -291,10 +313,10 @@ export class GameScene extends Phaser.Scene {
         const px = this.offsetX + x * TILE_SIZE + TILE_SIZE / 2;
         const py = this.offsetY + y * TILE_SIZE + TILE_SIZE / 2;
 
-        let textureKey = isOcean ? "ocean_wall" : "wall";
-        if (cell.type === "path") textureKey = isOcean ? "ocean_path" : "path";
-        else if (cell.type === "start") textureKey = isOcean ? "ocean_path" : "path";
-        else if (cell.type === "exit") textureKey = isOcean ? "ocean_path" : "path";
+        let textureKey = this.getThemeTexture("wall", "ocean_wall", "jungle_wall");
+        if (cell.type === "path") textureKey = this.getThemeTexture("path", "ocean_path", "jungle_path");
+        else if (cell.type === "start") textureKey = this.getThemeTexture("path", "ocean_path", "jungle_path");
+        else if (cell.type === "exit") textureKey = this.getThemeTexture("path", "ocean_path", "jungle_path");
 
         this.add.image(px, py, textureKey).setDisplaySize(TILE_SIZE, TILE_SIZE);
       }
@@ -427,7 +449,7 @@ export class GameScene extends Phaser.Scene {
       occupied.add(keyB);
 
       // Render both pads
-      const teleportTexture = isOcean ? "whirlpool" : "teleport";
+      const teleportTexture = this.getThemeTexture("teleport", "whirlpool", "tree_hole");
       for (const [pos, key] of [
         [posA, keyA],
         [posB, keyB],
@@ -470,9 +492,9 @@ export class GameScene extends Phaser.Scene {
       const px = this.offsetX + gridPos.x * TILE_SIZE + TILE_SIZE / 2;
       const py = this.offsetY + gridPos.y * TILE_SIZE + TILE_SIZE / 2;
 
-      let textureKey = isOcean ? "starfish" : "star";
-      if (item.itemType === "coin") textureKey = isOcean ? "pearl" : "coin";
-      else if (item.itemType === "key") textureKey = isOcean ? "shell" : "key";
+      let textureKey = this.getThemeTexture("star", "starfish", "gem");
+      if (item.itemType === "coin") textureKey = this.getThemeTexture("coin", "pearl", "fruit");
+      else if (item.itemType === "key") textureKey = this.getThemeTexture("key", "shell", "totem");
 
       if (item.itemType === "star") this.totalItems.stars++;
       else if (item.itemType === "coin") this.totalItems.coins++;
@@ -500,7 +522,7 @@ export class GameScene extends Phaser.Scene {
       const px = this.offsetX + gridPos.x * TILE_SIZE + TILE_SIZE / 2;
       const py = this.offsetY + gridPos.y * TILE_SIZE + TILE_SIZE / 2;
 
-      const trapTexture = isOcean ? "jellyfish" : "trap";
+      const trapTexture = this.getThemeTexture("trap", "jellyfish", "jungle_trap");
       const sprite = this.add
         .image(px, py, trapTexture)
         .setDisplaySize(TILE_SIZE * 0.75, TILE_SIZE * 0.75)
@@ -571,13 +593,102 @@ export class GameScene extends Phaser.Scene {
       const px = this.offsetX + targetX * TILE_SIZE + TILE_SIZE / 2;
       const py = this.offsetY + targetY * TILE_SIZE + TILE_SIZE / 2;
 
+      const fogTextureKey = this.getThemeTexture("fog", "fog", "jungle_fog");
       const sprite = this.add
-        .image(px, py, "fog")
+        .image(px, py, fogTextureKey)
         .setDisplaySize(TILE_SIZE, TILE_SIZE)
         .setDepth(3);
 
       this.fogSprites.set(cellKey, sprite);
     }
+
+    // Place vine bridges (jungle theme)
+    const vineBridges: VineBridgeData[] = (this.levelData as any).vineBridges || [];
+    for (const bridge of vineBridges) {
+      const gridPos = this.pickUniqueCell(walkableCells, occupied, bridge.position);
+      if (!gridPos) continue;
+      const cellKey = `${gridPos.x},${gridPos.y}`;
+      occupied.add(cellKey);
+
+      const px = this.offsetX + gridPos.x * TILE_SIZE + TILE_SIZE / 2;
+      const py = this.offsetY + gridPos.y * TILE_SIZE + TILE_SIZE / 2;
+
+      const sprite = this.add
+        .image(px, py, "vine_bridge")
+        .setDisplaySize(TILE_SIZE, TILE_SIZE)
+        .setDepth(0.5)
+        .setAlpha(0.9);
+      this.vineBridgeSprites.set(cellKey, sprite);
+    }
+
+    // Place patrol animals (jungle theme)
+    const patrolAnimals: PatrolAnimalData[] = (this.levelData as any).patrolAnimals || [];
+    for (const animal of patrolAnimals) {
+      const startPos = this.pickUniqueCell(walkableCells, occupied, animal.startPosition);
+      if (!startPos) continue;
+
+      const px = this.offsetX + startPos.x * TILE_SIZE + TILE_SIZE / 2;
+      const py = this.offsetY + startPos.y * TILE_SIZE + TILE_SIZE / 2;
+
+      const sprite = this.add
+        .image(px, py, "patrol_animal")
+        .setDisplaySize(TILE_SIZE * 0.85, TILE_SIZE * 0.85)
+        .setDepth(2)
+        .setTint(this.getAnimalTint(animal.animalType));
+
+      this.patrolAnimalSprites.set(animal.id, {
+        sprite,
+        data: animal,
+        currentWaypoint: 0,
+        gridPos: { ...startPos },
+      });
+
+      // Start patrol movement
+      this.startPatrolMovement(animal.id);
+    }
+
+    // Place boss at exit (if level has boss data)
+    const bossData = (this.levelData as any).boss;
+    if (bossData) {
+      const bossX = this.exitPos.x;
+      const bossY = this.exitPos.y;
+      const bpx = this.offsetX + bossX * TILE_SIZE + TILE_SIZE / 2;
+      const bpy = this.offsetY + bossY * TILE_SIZE + TILE_SIZE / 2;
+
+      const bossSprite = this.add
+        .image(bpx, bpy, "patrol_animal")
+        .setDisplaySize(TILE_SIZE * 1.2, TILE_SIZE * 1.2)
+        .setDepth(3)
+        .setTint(0xff4444);
+
+      this.tweens.add({
+        targets: bossSprite,
+        scaleX: bossSprite.scaleX * 1.1,
+        scaleY: bossSprite.scaleY * 1.1,
+        duration: 600,
+        yoyo: true,
+        repeat: -1,
+        ease: "Sine.easeInOut",
+      });
+
+      this.patrolAnimalSprites.set("boss", {
+        sprite: bossSprite,
+        data: {
+          id: "boss",
+          startPosition: { x: bossX, y: bossY },
+          patrolPath: [],
+          speed: 0,
+          animalType: bossData.animalType || "leopard",
+        },
+        currentWaypoint: 0,
+        gridPos: { x: bossX, y: bossY },
+      });
+    }
+
+    // Listen for battle results
+    this.events.on("battle-result", (result: { won: boolean; animalId: string; isBoss: boolean }) => {
+      this.handleBattleResult(result);
+    });
 
     // Determine if exit should be locked (stars exist = must collect all)
     this.exitLocked = this.totalItems.stars > 0;
@@ -687,8 +798,32 @@ export class GameScene extends Phaser.Scene {
       });
     }
 
+    // Jungle atmosphere: falling leaves
+    if (this.isJungleLevel()) {
+      this.time.addEvent({
+        delay: 600,
+        loop: true,
+        callback: () => {
+          const lx = Phaser.Math.Between(0, this.cameras.main.width);
+          const leaf = this.add.circle(lx, -10, Phaser.Math.Between(2, 4), 0x228b22, 0.5)
+            .setScrollFactor(0)
+            .setDepth(15);
+          this.tweens.add({
+            targets: leaf,
+            y: this.cameras.main.height + 10,
+            x: lx + Phaser.Math.Between(-40, 40),
+            alpha: 0,
+            duration: Phaser.Math.Between(4000, 7000),
+            ease: "Sine.easeIn",
+            onComplete: () => leaf.destroy(),
+          });
+        },
+      });
+    }
+
     // Background music
-    music.play(isOcean ? "bgm_ocean" : "bgm_standard");
+    const bgmKey = this.getThemeTexture("bgm_standard", "bgm_ocean", "bgm_jungle");
+    music.play(bgmKey);
   }
 
   update(): void {
@@ -718,6 +853,9 @@ export class GameScene extends Phaser.Scene {
 
     // Wall check
     if (targetCell.type === "wall") return;
+
+    // Collapsed vine bridge check
+    if (this.collapsedBridges.has(`${newX},${newY}`)) return;
 
     const cellKey = `${newX},${newY}`;
 
@@ -769,6 +907,35 @@ export class GameScene extends Phaser.Scene {
     this.isMoving = true;
     this.playerPos = { x: newX, y: newY };
 
+    // Collapse vine bridge if player was standing on one
+    const bridgeKey = this.player.getData("onVineBridge") as string | undefined;
+    if (bridgeKey && bridgeKey !== `${newX},${newY}`) {
+      this.player.setData("onVineBridge", null);
+      this.collapsedBridges.add(bridgeKey);
+      const bridgeSprite = this.vineBridgeSprites.get(bridgeKey);
+      if (bridgeSprite) {
+        this.tweens.add({
+          targets: bridgeSprite,
+          alpha: 0,
+          scaleY: 0,
+          duration: 400,
+          ease: "Power2",
+          onComplete: () => {
+            bridgeSprite.destroy();
+            this.vineBridgeSprites.delete(bridgeKey);
+            const [bx, by] = bridgeKey.split(",").map(Number);
+            if (this.grid[by]?.[bx]) {
+              this.grid[by][bx].type = "wall";
+              const wpx = this.offsetX + bx * TILE_SIZE + TILE_SIZE / 2;
+              const wpy = this.offsetY + by * TILE_SIZE + TILE_SIZE / 2;
+              const wallTexture = this.isJungleLevel() ? "jungle_wall" : this.isOceanLevel() ? "ocean_wall" : "wall";
+              this.add.image(wpx, wpy, wallTexture).setDisplaySize(TILE_SIZE, TILE_SIZE);
+            }
+          },
+        });
+      }
+    }
+
     const targetPx = this.offsetX + newX * TILE_SIZE + TILE_SIZE / 2;
     const targetPy = this.offsetY + newY * TILE_SIZE + TILE_SIZE / 2;
 
@@ -791,6 +958,20 @@ export class GameScene extends Phaser.Scene {
 
     // Reveal fog in 1-tile radius
     this.revealFog(x, y);
+
+    // Check if standing on vine bridge — mark for collapse when leaving
+    if (this.vineBridgeSprites.has(cellKey) && !this.collapsedBridges.has(cellKey)) {
+      this.player.setData("onVineBridge", cellKey);
+    }
+
+    // Check for patrol animal collision
+    for (const [id, animal] of this.patrolAnimalSprites) {
+      if (this.defeatedAnimals.has(id)) continue;
+      if (animal.gridPos.x === x && animal.gridPos.y === y) {
+        this.triggerBattle(id);
+        return;
+      }
+    }
 
     // Check for item collection
     if (this.itemSprites.has(cellKey)) {
@@ -857,6 +1038,21 @@ export class GameScene extends Phaser.Scene {
 
     // Check for exit
     if (cell.type === "exit" && !this.exitLocked) {
+      const bossData = (this.levelData as any).boss;
+      if (bossData && !this.bossDefeated) {
+        this.isPaused = true;
+        this.scene.launch("BattleScene", {
+          animalType: bossData.animalType || "leopard",
+          animalHp: bossData.hp || 5,
+          attacksPerRound: bossData.attacksPerRound || 3,
+          timingBarSpeed: 500,
+          perfectZoneSize: 0.08,
+          parentScene: "GameScene",
+          animalId: "boss",
+          isBoss: true,
+        });
+        return;
+      }
       this.handleLevelComplete();
     }
   }
@@ -1020,6 +1216,29 @@ export class GameScene extends Phaser.Scene {
 
   private isOceanLevel(): boolean {
     return this.levelData.level >= 51 && this.levelData.level <= 65;
+  }
+
+  private isJungleLevel(): boolean {
+    return this.levelData.level >= 66 && this.levelData.level <= 80;
+  }
+
+  private getThemeTexture(standard: string, ocean: string, jungle: string): string {
+    if (this.isJungleLevel()) return jungle;
+    if (this.isOceanLevel()) return ocean;
+    return standard;
+  }
+
+  private getAnimalTint(type: AnimalType): number {
+    const tints: Record<AnimalType, number> = {
+      snake: 0x66bb6a,
+      monkey: 0xffb74d,
+      lizard: 0x4db6ac,
+      leopard: 0xffd54f,
+      parrot: 0xef5350,
+      crocodile: 0x66bb6a,
+      spider: 0x9e9e9e,
+    };
+    return tints[type] || 0xffffff;
   }
 
   private updateExitSprite(): void {
@@ -1221,6 +1440,102 @@ export class GameScene extends Phaser.Scene {
       }
     }
     return null;
+  }
+
+  private startPatrolMovement(animalId: string): void {
+    const animal = this.patrolAnimalSprites.get(animalId);
+    if (!animal || this.defeatedAnimals.has(animalId)) return;
+
+    const { data } = animal;
+    if (!data.patrolPath || data.patrolPath.length === 0) return;
+
+    const moveToNextWaypoint = () => {
+      const a = this.patrolAnimalSprites.get(animalId);
+      if (!a || this.defeatedAnimals.has(animalId)) return;
+
+      a.currentWaypoint = (a.currentWaypoint + 1) % data.patrolPath.length;
+      const target = data.patrolPath[a.currentWaypoint];
+
+      const targetX = Math.min(Math.max(1, target.x | 1), this.levelData.gridWidth - 2);
+      const targetY = Math.min(Math.max(1, target.y | 1), this.levelData.gridHeight - 2);
+
+      const px = this.offsetX + targetX * TILE_SIZE + TILE_SIZE / 2;
+      const py = this.offsetY + targetY * TILE_SIZE + TILE_SIZE / 2;
+
+      const dist = Math.abs(targetX - a.gridPos.x) + Math.abs(targetY - a.gridPos.y);
+      const duration = (dist / data.speed) * 1000;
+
+      a.gridPos = { x: targetX, y: targetY };
+
+      this.tweens.add({
+        targets: a.sprite,
+        x: px,
+        y: py,
+        duration: Math.max(duration, 300),
+        ease: "Linear",
+        onComplete: () => {
+          if (this.playerPos.x === targetX && this.playerPos.y === targetY) {
+            this.triggerBattle(animalId);
+          }
+          this.time.delayedCall(200, moveToNextWaypoint);
+        },
+      });
+    };
+
+    const delay = (1 / data.speed) * 500;
+    this.time.delayedCall(delay, moveToNextWaypoint);
+  }
+
+  private triggerBattle(animalId: string): void {
+    const animal = this.patrolAnimalSprites.get(animalId);
+    if (!animal || this.defeatedAnimals.has(animalId)) return;
+
+    this.isPaused = true;
+    const level = this.levelData.level;
+
+    const progress = Math.max(0, Math.min(1, (level - 66) / 14));
+    const speed = 200 + progress * 300;
+    const perfectSize = 0.2 - progress * 0.12;
+
+    this.scene.launch("BattleScene", {
+      animalType: animal.data.animalType,
+      animalHp: 3,
+      attacksPerRound: 1,
+      timingBarSpeed: speed,
+      perfectZoneSize: perfectSize,
+      parentScene: "GameScene",
+      animalId,
+      isBoss: false,
+    });
+  }
+
+  private handleBattleResult(result: { won: boolean; animalId: string; isBoss: boolean }): void {
+    this.isPaused = false;
+
+    if (result.won) {
+      this.defeatedAnimals.add(result.animalId);
+
+      if (result.isBoss) {
+        this.bossDefeated = true;
+        this.time.delayedCall(500, () => this.handleLevelComplete());
+        return;
+      }
+
+      const animal = this.patrolAnimalSprites.get(result.animalId);
+      if (animal) {
+        this.tweens.add({
+          targets: animal.sprite,
+          alpha: 0,
+          scaleX: 0,
+          scaleY: 0,
+          duration: 400,
+          onComplete: () => animal.sprite.destroy(),
+        });
+        this.patrolAnimalSprites.delete(result.animalId);
+      }
+    } else {
+      this.handleTrapHit();
+    }
   }
 
   /**
