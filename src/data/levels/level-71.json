@@ -1,0 +1,105 @@
+{
+  "level": 71,
+  "gridWidth": 27,
+  "gridHeight": 27,
+  "seed": 71001,
+  "difficultyTier": 7,
+  "startPosition": { "x": 1, "y": 1 },
+  "exitPosition": { "x": 25, "y": 25 },
+  "puzzleGates": [
+    { "id": "gate-71-1", "position": { "x": 5, "y": 3 }, "puzzleType": "directionPuzzle", "difficulty": 7 },
+    { "id": "gate-71-2", "position": { "x": 19, "y": 5 }, "puzzleType": "patternSequence", "difficulty": 7 },
+    { "id": "gate-71-3", "position": { "x": 3, "y": 15 }, "puzzleType": "twoDigitAdd", "difficulty": 7 },
+    { "id": "gate-71-4", "position": { "x": 23, "y": 13 }, "puzzleType": "zhuyinToChar", "difficulty": 7 },
+    { "id": "gate-71-5", "position": { "x": 13, "y": 23 }, "puzzleType": "clockReading", "difficulty": 7 }
+  ],
+  "items": [
+    { "position": { "x": 1, "y": 3 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 11, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 25, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 7, "y": 11 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 21, "y": 9 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 1, "y": 23 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 9, "y": 21 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 23, "y": 21 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 25, "y": 17 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 3, "y": 3 }, "itemType": "key", "requiredForGate": "gate-71-1" },
+    { "position": { "x": 17, "y": 3 }, "itemType": "key", "requiredForGate": "gate-71-2" },
+    { "position": { "x": 1, "y": 13 }, "itemType": "key", "requiredForGate": "gate-71-3" },
+    { "position": { "x": 21, "y": 11 }, "itemType": "key", "requiredForGate": "gate-71-4" },
+    { "position": { "x": 11, "y": 21 }, "itemType": "key", "requiredForGate": "gate-71-5" }
+  ],
+  "teleportPairs": [
+    { "id": "tp-71-1", "posA": { "x": 1, "y": 9 }, "posB": { "x": 25, "y": 23 } },
+    { "id": "tp-71-2", "posA": { "x": 13, "y": 3 }, "posB": { "x": 23, "y": 25 } }
+  ],
+  "traps": [
+    { "position": { "x": 9, "y": 5 }, "group": 0 },
+    { "position": { "x": 23, "y": 7 }, "group": 1 },
+    { "position": { "x": 7, "y": 17 }, "group": 0 },
+    { "position": { "x": 19, "y": 15 }, "group": 1 },
+    { "position": { "x": 5, "y": 23 }, "group": 0 },
+    { "position": { "x": 21, "y": 23 }, "group": 1 }
+  ],
+  "fogZones": [
+    { "position": { "x": 9, "y": 7 } },
+    { "position": { "x": 11, "y": 7 } },
+    { "position": { "x": 9, "y": 9 } },
+    { "position": { "x": 11, "y": 9 } },
+    { "position": { "x": 13, "y": 9 } },
+    { "position": { "x": 15, "y": 11 } },
+    { "position": { "x": 17, "y": 11 } },
+    { "position": { "x": 5, "y": 19 } },
+    { "position": { "x": 7, "y": 19 } },
+    { "position": { "x": 17, "y": 19 } },
+    { "position": { "x": 19, "y": 19 } },
+    { "position": { "x": 21, "y": 17 } },
+    { "position": { "x": 23, "y": 17 } },
+    { "position": { "x": 15, "y": 23 } }
+  ],
+  "vineBridges": [
+    { "position": { "x": 15, "y": 7 } },
+    { "position": { "x": 3, "y": 19 } },
+    { "position": { "x": 25, "y": 11 } },
+    { "position": { "x": 13, "y": 19 } },
+    { "position": { "x": 9, "y": 25 } }
+  ],
+  "patrolAnimals": [
+    {
+      "id": "animal-71-1",
+      "startPosition": { "x": 13, "y": 11 },
+      "patrolPath": [
+        { "x": 13, "y": 11 },
+        { "x": 21, "y": 11 },
+        { "x": 21, "y": 19 },
+        { "x": 13, "y": 19 }
+      ],
+      "speed": 1.0,
+      "animalType": "leopard"
+    },
+    {
+      "id": "animal-71-2",
+      "startPosition": { "x": 3, "y": 7 },
+      "patrolPath": [
+        { "x": 3, "y": 7 },
+        { "x": 9, "y": 7 },
+        { "x": 9, "y": 13 },
+        { "x": 3, "y": 13 }
+      ],
+      "speed": 0.9,
+      "animalType": "snake"
+    },
+    {
+      "id": "animal-71-3",
+      "startPosition": { "x": 19, "y": 21 },
+      "patrolPath": [
+        { "x": 19, "y": 21 },
+        { "x": 25, "y": 21 },
+        { "x": 25, "y": 25 },
+        { "x": 19, "y": 25 }
+      ],
+      "speed": 0.8,
+      "animalType": "crocodile"
+    }
+  ]
+}

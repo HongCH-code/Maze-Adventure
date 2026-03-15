@@ -1,0 +1,127 @@
+{
+  "level": 74,
+  "gridWidth": 29,
+  "gridHeight": 29,
+  "seed": 74001,
+  "difficultyTier": 7,
+  "startPosition": { "x": 1, "y": 1 },
+  "exitPosition": { "x": 27, "y": 27 },
+  "puzzleGates": [
+    { "id": "gate-74-1", "position": { "x": 5, "y": 3 }, "puzzleType": "directionPuzzle", "difficulty": 7 },
+    { "id": "gate-74-2", "position": { "x": 19, "y": 5 }, "puzzleType": "patternSequence", "difficulty": 7 },
+    { "id": "gate-74-3", "position": { "x": 3, "y": 17 }, "puzzleType": "twoDigitAdd", "difficulty": 7 },
+    { "id": "gate-74-4", "position": { "x": 23, "y": 15 }, "puzzleType": "zhuyinToChar", "difficulty": 7 },
+    { "id": "gate-74-5", "position": { "x": 13, "y": 25 }, "puzzleType": "coinCounting", "difficulty": 7 }
+  ],
+  "items": [
+    { "position": { "x": 3, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 13, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 27, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 7, "y": 11 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 25, "y": 9 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 1, "y": 25 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 27, "y": 21 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 11, "y": 19 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 25, "y": 23 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 19, "y": 27 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 3, "y": 27 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 3, "y": 3 }, "itemType": "key", "requiredForGate": "gate-74-1" },
+    { "position": { "x": 17, "y": 3 }, "itemType": "key", "requiredForGate": "gate-74-2" },
+    { "position": { "x": 1, "y": 15 }, "itemType": "key", "requiredForGate": "gate-74-3" },
+    { "position": { "x": 21, "y": 13 }, "itemType": "key", "requiredForGate": "gate-74-4" },
+    { "position": { "x": 11, "y": 23 }, "itemType": "key", "requiredForGate": "gate-74-5" }
+  ],
+  "teleportPairs": [
+    { "id": "tp-74-1", "posA": { "x": 1, "y": 9 }, "posB": { "x": 27, "y": 25 } },
+    { "id": "tp-74-2", "posA": { "x": 15, "y": 3 }, "posB": { "x": 27, "y": 17 } },
+    { "id": "tp-74-3", "posA": { "x": 7, "y": 23 }, "posB": { "x": 25, "y": 19 } }
+  ],
+  "traps": [
+    { "position": { "x": 9, "y": 5 }, "group": 0 },
+    { "position": { "x": 25, "y": 7 }, "group": 1 },
+    { "position": { "x": 7, "y": 15 }, "group": 0 },
+    { "position": { "x": 17, "y": 13 }, "group": 1 },
+    { "position": { "x": 5, "y": 23 }, "group": 0 },
+    { "position": { "x": 21, "y": 21 }, "group": 1 },
+    { "position": { "x": 15, "y": 27 }, "group": 0 },
+    { "position": { "x": 27, "y": 13 }, "group": 1 }
+  ],
+  "fogZones": [
+    { "position": { "x": 9, "y": 7 } },
+    { "position": { "x": 11, "y": 7 } },
+    { "position": { "x": 9, "y": 9 } },
+    { "position": { "x": 11, "y": 9 } },
+    { "position": { "x": 13, "y": 9 } },
+    { "position": { "x": 15, "y": 9 } },
+    { "position": { "x": 13, "y": 11 } },
+    { "position": { "x": 5, "y": 17 } },
+    { "position": { "x": 7, "y": 17 } },
+    { "position": { "x": 17, "y": 17 } },
+    { "position": { "x": 19, "y": 17 } },
+    { "position": { "x": 21, "y": 19 } },
+    { "position": { "x": 23, "y": 19 } },
+    { "position": { "x": 7, "y": 25 } },
+    { "position": { "x": 9, "y": 25 } },
+    { "position": { "x": 17, "y": 25 } },
+    { "position": { "x": 19, "y": 25 } },
+    { "position": { "x": 25, "y": 25 } }
+  ],
+  "vineBridges": [
+    { "position": { "x": 13, "y": 7 } },
+    { "position": { "x": 3, "y": 19 } },
+    { "position": { "x": 27, "y": 11 } },
+    { "position": { "x": 17, "y": 21 } },
+    { "position": { "x": 11, "y": 27 } },
+    { "position": { "x": 23, "y": 7 } }
+  ],
+  "patrolAnimals": [
+    {
+      "id": "animal-74-1",
+      "startPosition": { "x": 15, "y": 13 },
+      "patrolPath": [
+        { "x": 15, "y": 13 },
+        { "x": 23, "y": 13 },
+        { "x": 23, "y": 21 },
+        { "x": 15, "y": 21 }
+      ],
+      "speed": 1.2,
+      "animalType": "leopard"
+    },
+    {
+      "id": "animal-74-2",
+      "startPosition": { "x": 3, "y": 7 },
+      "patrolPath": [
+        { "x": 3, "y": 7 },
+        { "x": 11, "y": 7 },
+        { "x": 11, "y": 15 },
+        { "x": 3, "y": 15 }
+      ],
+      "speed": 1.1,
+      "animalType": "crocodile"
+    },
+    {
+      "id": "animal-74-3",
+      "startPosition": { "x": 19, "y": 23 },
+      "patrolPath": [
+        { "x": 19, "y": 23 },
+        { "x": 27, "y": 23 },
+        { "x": 27, "y": 27 },
+        { "x": 19, "y": 27 }
+      ],
+      "speed": 1.0,
+      "animalType": "snake"
+    },
+    {
+      "id": "animal-74-4",
+      "startPosition": { "x": 19, "y": 7 },
+      "patrolPath": [
+        { "x": 19, "y": 7 },
+        { "x": 27, "y": 7 },
+        { "x": 27, "y": 13 },
+        { "x": 19, "y": 13 }
+      ],
+      "speed": 1.0,
+      "animalType": "spider"
+    }
+  ]
+}

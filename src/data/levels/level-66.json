@@ -1,0 +1,63 @@
+{
+  "level": 66,
+  "gridWidth": 23,
+  "gridHeight": 23,
+  "seed": 66001,
+  "difficultyTier": 7,
+  "startPosition": { "x": 1, "y": 1 },
+  "exitPosition": { "x": 21, "y": 21 },
+  "puzzleGates": [
+    { "id": "gate-66-1", "position": { "x": 5, "y": 3 }, "puzzleType": "directionPuzzle", "difficulty": 7 },
+    { "id": "gate-66-2", "position": { "x": 15, "y": 5 }, "puzzleType": "twoDigitAdd", "difficulty": 7 },
+    { "id": "gate-66-3", "position": { "x": 3, "y": 13 }, "puzzleType": "patternSequence", "difficulty": 7 },
+    { "id": "gate-66-4", "position": { "x": 17, "y": 17 }, "puzzleType": "coinCounting", "difficulty": 7 }
+  ],
+  "items": [
+    { "position": { "x": 1, "y": 3 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 9, "y": 1 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 19, "y": 3 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 3, "y": 9 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 13, "y": 7 }, "itemType": "star", "requiredForGate": null },
+    { "position": { "x": 7, "y": 19 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 19, "y": 15 }, "itemType": "coin", "requiredForGate": null },
+    { "position": { "x": 3, "y": 3 }, "itemType": "key", "requiredForGate": "gate-66-1" },
+    { "position": { "x": 13, "y": 3 }, "itemType": "key", "requiredForGate": "gate-66-2" },
+    { "position": { "x": 1, "y": 11 }, "itemType": "key", "requiredForGate": "gate-66-3" },
+    { "position": { "x": 15, "y": 15 }, "itemType": "key", "requiredForGate": "gate-66-4" }
+  ],
+  "teleportPairs": [
+    { "id": "tp-66-1", "posA": { "x": 1, "y": 7 }, "posB": { "x": 21, "y": 19 } }
+  ],
+  "traps": [
+    { "position": { "x": 7, "y": 5 }, "group": 0 },
+    { "position": { "x": 19, "y": 7 }, "group": 1 },
+    { "position": { "x": 5, "y": 15 }, "group": 0 },
+    { "position": { "x": 13, "y": 19 }, "group": 1 }
+  ],
+  "fogZones": [
+    { "position": { "x": 7, "y": 7 } },
+    { "position": { "x": 9, "y": 7 } },
+    { "position": { "x": 7, "y": 9 } },
+    { "position": { "x": 9, "y": 9 } },
+    { "position": { "x": 15, "y": 13 } },
+    { "position": { "x": 17, "y": 13 } }
+  ],
+  "vineBridges": [
+    { "position": { "x": 11, "y": 11 } },
+    { "position": { "x": 19, "y": 11 } }
+  ],
+  "patrolAnimals": [
+    {
+      "id": "animal-66-1",
+      "startPosition": { "x": 11, "y": 5 },
+      "patrolPath": [
+        { "x": 11, "y": 5 },
+        { "x": 17, "y": 5 },
+        { "x": 17, "y": 11 },
+        { "x": 11, "y": 11 }
+      ],
+      "speed": 0.6,
+      "animalType": "monkey"
+    }
+  ]
+}

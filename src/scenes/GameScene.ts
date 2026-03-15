@@ -86,6 +86,21 @@ import level62 from "../data/levels/level-62.json";
 import level63 from "../data/levels/level-63.json";
 import level64 from "../data/levels/level-64.json";
 import level65 from "../data/levels/level-65.json";
+import level66 from "../data/levels/level-66.json";
+import level67 from "../data/levels/level-67.json";
+import level68 from "../data/levels/level-68.json";
+import level69 from "../data/levels/level-69.json";
+import level70 from "../data/levels/level-70.json";
+import level71 from "../data/levels/level-71.json";
+import level72 from "../data/levels/level-72.json";
+import level73 from "../data/levels/level-73.json";
+import level74 from "../data/levels/level-74.json";
+import level75 from "../data/levels/level-75.json";
+import level76 from "../data/levels/level-76.json";
+import level77 from "../data/levels/level-77.json";
+import level78 from "../data/levels/level-78.json";
+import level79 from "../data/levels/level-79.json";
+import level80 from "../data/levels/level-80.json";
 
 const LEVEL_MAP: Record<number, LevelData> = {
   1: level01 as LevelData,
@@ -153,6 +168,21 @@ const LEVEL_MAP: Record<number, LevelData> = {
   63: level63 as LevelData,
   64: level64 as LevelData,
   65: level65 as LevelData,
+  66: level66 as LevelData,
+  67: level67 as LevelData,
+  68: level68 as LevelData,
+  69: level69 as LevelData,
+  70: level70 as LevelData,
+  71: level71 as LevelData,
+  72: level72 as LevelData,
+  73: level73 as LevelData,
+  74: level74 as LevelData,
+  75: level75 as LevelData,
+  76: level76 as LevelData,
+  77: level77 as LevelData,
+  78: level78 as LevelData,
+  79: level79 as LevelData,
+  80: level80 as LevelData,
 };
 
 const TILE_SIZE = 32;
