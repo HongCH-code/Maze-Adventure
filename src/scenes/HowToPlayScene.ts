@@ -85,7 +85,7 @@ export class HowToPlayScene extends Phaser.Scene {
 
     // Page navigation
     this.prevBtn = this.add
-      .text(width / 2 - 140, height - 45, "< 上一頁", {
+      .text(width / 2 - 140, height - 30, "< 上一頁", {
         fontSize: "18px",
         color: "#aabbcc",
         fontFamily: "Arial",
@@ -94,7 +94,7 @@ export class HowToPlayScene extends Phaser.Scene {
       .setInteractive({ useHandCursor: true });
 
     this.nextBtn = this.add
-      .text(width / 2 + 140, height - 45, "下一頁 >", {
+      .text(width / 2 + 140, height - 30, "下一頁 >", {
         fontSize: "18px",
         color: "#aabbcc",
         fontFamily: "Arial",
@@ -103,7 +103,7 @@ export class HowToPlayScene extends Phaser.Scene {
       .setInteractive({ useHandCursor: true });
 
     this.pageLabel = this.add
-      .text(width / 2, height - 45, "", {
+      .text(width / 2, height - 30, "", {
         fontSize: "16px",
         color: "#ffffff",
         fontFamily: "Arial",
@@ -152,9 +152,9 @@ export class HowToPlayScene extends Phaser.Scene {
 
     // Panel
     const panelW = 620;
-    const panelH = 500;
+    const panelH = 480;
     const panelX = (width - panelW) / 2;
-    const panelY = 50;
+    const panelY = 45;
 
     const panel = this.add.graphics();
     panel.fillStyle(0x222244, 1);
@@ -175,8 +175,8 @@ export class HowToPlayScene extends Phaser.Scene {
     this.pageContainer.add(title);
 
     // Rules
-    const startY = panelY + 80;
-    const lineH = 42;
+    const startY = panelY + 75;
+    const lineH = 40;
     const iconSize = 28;
     const textX = panelX + 70;
 
