@@ -1,3 +1,4 @@
+import { TOTAL_LEVELS } from "./LevelSelectScene";
 import Phaser from "phaser";
 import { MazeGenerator } from "../systems/MazeGenerator";
 import { sfx } from "../systems/SoundManager";
@@ -1061,7 +1062,7 @@ export class GameScene extends Phaser.Scene {
     const elapsed = (Date.now() - this.startTime) / 1000;
 
     const nextLevel = this.levelData.level + 1;
-    if (nextLevel <= 65) {
+    if (nextLevel <= TOTAL_LEVELS) {
       this.progressManager.unlockLevel(nextLevel);
     }
 

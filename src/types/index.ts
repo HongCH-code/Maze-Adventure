@@ -21,7 +21,9 @@ export type PuzzleType =
   | "zhuyinToChar"
   | "imageToZhuyin"
   | "oceanCreature"
-  | "lifeSafety";
+  | "lifeSafety"
+  | "directionPuzzle"
+  | "patternSequence";
 
 export type DifficultyTier = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
@@ -59,6 +61,26 @@ export interface FogZoneData {
   position: Position;
 }
 
+export interface VineBridgeData {
+  position: Position;
+}
+
+export type AnimalType = "snake" | "monkey" | "lizard" | "leopard" | "parrot" | "crocodile" | "spider";
+
+export interface PatrolAnimalData {
+  id: string;
+  startPosition: Position;
+  patrolPath: Position[];
+  speed: number;
+  animalType: AnimalType;
+}
+
+export interface BossData {
+  animalType: AnimalType;
+  hp: number;
+  attacksPerRound: number;
+}
+
 export interface LevelData {
   level: number;
   gridWidth: number;
@@ -71,6 +93,9 @@ export interface LevelData {
   traps?: TrapData[];
   waterCurrents?: WaterCurrentData[];
   fogZones?: FogZoneData[];
+  vineBridges?: VineBridgeData[];
+  patrolAnimals?: PatrolAnimalData[];
+  boss?: BossData;
   startPosition: Position;
   exitPosition: Position;
 }

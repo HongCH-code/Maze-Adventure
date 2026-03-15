@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import { ProgressManager } from "../systems/ProgressManager";
 import { music } from "../systems/MusicManager";
 
-export const TOTAL_LEVELS = 65;
+export const TOTAL_LEVELS = 80;
 const COLS = 5;
 const ROWS_PER_PAGE = 4;
 const LEVELS_PER_PAGE = COLS * ROWS_PER_PAGE;
