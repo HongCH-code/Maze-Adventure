@@ -1518,31 +1518,89 @@ export class GameScene extends Phaser.Scene {
       const targetX = Math.min(Math.max(1, target.x | 1), this.levelData.gridWidth - 2);
       const targetY = Math.min(Math.max(1, target.y | 1), this.levelData.gridHeight - 2);
 
-      const px = this.offsetX + targetX * TILE_SIZE + TILE_SIZE / 2;
-      const py = this.offsetY + targetY * TILE_SIZE + TILE_SIZE / 2;
+      // Build step-by-step path from current pos to target
+      const steps = this.buildPatrolSteps(a.gridPos, { x: targetX, y: targetY });
+      if (steps.length === 0) {
+        // No valid path, skip to next waypoint
+        this.time.delayedCall(200, moveToNextWaypoint);
+        return;
+      }
 
-      const dist = Math.abs(targetX - a.gridPos.x) + Math.abs(targetY - a.gridPos.y);
-      const duration = (dist / data.speed) * 1000;
-
-      a.gridPos = { x: targetX, y: targetY };
-
-      this.tweens.add({
-        targets: a.sprite,
-        x: px,
-        y: py,
-        duration: Math.max(duration, 300),
-        ease: "Linear",
-        onComplete: () => {
-          if (this.playerPos.x === targetX && this.playerPos.y === targetY) {
-            this.triggerBattle(animalId);
-          }
-          this.time.delayedCall(200, moveToNextWaypoint);
-        },
-      });
+      // Move one step at a time
+      this.moveAnimalStep(animalId, steps, 0, data.speed, moveToNextWaypoint);
     };
 
     const delay = (1 / data.speed) * 500;
     this.time.delayedCall(delay, moveToNextWaypoint);
+  }
+
+  /** Build a list of grid positions stepping one tile at a time from start to end */
+  private buildPatrolSteps(from: Position, to: Position): Position[] {
+    const steps: Position[] = [];
+    let cx = from.x;
+    let cy = from.y;
+
+    // Move horizontally first, then vertically (simple L-shaped path)
+    const dx = to.x > cx ? 2 : to.x < cx ? -2 : 0;
+    const dy = to.y > cy ? 2 : to.y < cy ? -2 : 0;
+
+    // Horizontal steps (maze grid uses odd coords, step by 2)
+    while (cx !== to.x) {
+      cx += dx;
+      steps.push({ x: cx, y: cy });
+    }
+    // Vertical steps
+    while (cy !== to.y) {
+      cy += dy;
+      steps.push({ x: cx, y: cy });
+    }
+
+    return steps;
+  }
+
+  /** Move a patrol animal one step at a time, checking collision at each step */
+  private moveAnimalStep(
+    animalId: string,
+    steps: Position[],
+    stepIndex: number,
+    speed: number,
+    onPathComplete: () => void
+  ): void {
+    const a = this.patrolAnimalSprites.get(animalId);
+    if (!a || this.defeatedAnimals.has(animalId)) return;
+
+    if (stepIndex >= steps.length) {
+      // Reached end of path segment, pause then move to next waypoint
+      this.time.delayedCall(200, onPathComplete);
+      return;
+    }
+
+    const nextPos = steps[stepIndex];
+    const px = this.offsetX + nextPos.x * TILE_SIZE + TILE_SIZE / 2;
+    const py = this.offsetY + nextPos.y * TILE_SIZE + TILE_SIZE / 2;
+    const stepDuration = (1 / speed) * 500; // time per single tile
+
+    // Update grid position AFTER tween completes (not before)
+    this.tweens.add({
+      targets: a.sprite,
+      x: px,
+      y: py,
+      duration: Math.max(stepDuration, 150),
+      ease: "Linear",
+      onComplete: () => {
+        // Update grid pos after arriving
+        a.gridPos = { x: nextPos.x, y: nextPos.y };
+
+        // Check collision with player at this grid cell
+        if (this.playerPos.x === nextPos.x && this.playerPos.y === nextPos.y) {
+          this.triggerBattle(animalId);
+          return; // Stop patrol chain during battle
+        }
+
+        // Continue to next step
+        this.moveAnimalStep(animalId, steps, stepIndex + 1, speed, onPathComplete);
+      },
+    });
   }
 
   private triggerBattle(animalId: string): void {
@@ -1594,6 +1652,8 @@ export class GameScene extends Phaser.Scene {
       }
     } else {
       this.handleTrapHit();
+      // Resume patrol for the animal that won (battle stopped its chain)
+      this.startPatrolMovement(result.animalId);
     }
   }
 
