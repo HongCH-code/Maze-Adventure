@@ -247,9 +247,10 @@ export class GameScene extends Phaser.Scene {
   private fogSprites: Map<string, Phaser.GameObjects.Image> = new Map();
   private revealedFog: Set<string> = new Set();
 
-  // Vine bridge tracking
+  // Vine bridge tracking (5 uses before collapse)
   private vineBridgeSprites: Map<string, Phaser.GameObjects.Image> = new Map();
-  private collapsedBridges: Set<string> = new Set();
+  private vineBridgeUses: Map<string, number> = new Map();
+  private static readonly MAX_BRIDGE_USES = 5;
 
   // Patrol animal tracking
   private patrolAnimalSprites: Map<string, {
@@ -287,7 +288,7 @@ export class GameScene extends Phaser.Scene {
     this.fogSprites.clear();
     this.revealedFog.clear();
     this.vineBridgeSprites.clear();
-    this.collapsedBridges.clear();
+    this.vineBridgeUses.clear();
     this.patrolAnimalSprites.clear();
     this.defeatedAnimals.clear();
     this.bossDefeated = false;
@@ -884,8 +885,9 @@ export class GameScene extends Phaser.Scene {
     // Wall check
     if (targetCell.type === "wall") return;
 
-    // Collapsed vine bridge check
-    if (this.collapsedBridges.has(`${newX},${newY}`)) return;
+    // Collapsed vine bridge check (5 uses = destroyed)
+    const bridgeUses = this.vineBridgeUses.get(`${newX},${newY}`) ?? 0;
+    if (bridgeUses >= GameScene.MAX_BRIDGE_USES) return;
 
     const cellKey = `${newX},${newY}`;
 
@@ -937,30 +939,54 @@ export class GameScene extends Phaser.Scene {
     this.isMoving = true;
     this.playerPos = { x: newX, y: newY };
 
-    // Collapse vine bridge if player was standing on one
+    // Degrade vine bridge if player was standing on one
     const bridgeKey = this.player.getData("onVineBridge") as string | undefined;
     if (bridgeKey && bridgeKey !== `${newX},${newY}`) {
       this.player.setData("onVineBridge", null);
-      this.collapsedBridges.add(bridgeKey);
+      const uses = (this.vineBridgeUses.get(bridgeKey) ?? 0) + 1;
+      this.vineBridgeUses.set(bridgeKey, uses);
       const bridgeSprite = this.vineBridgeSprites.get(bridgeKey);
-      if (bridgeSprite) {
+
+      if (uses >= GameScene.MAX_BRIDGE_USES) {
+        // Final use — collapse the bridge
+        if (bridgeSprite) {
+          this.tweens.add({
+            targets: bridgeSprite,
+            alpha: 0,
+            scaleY: 0,
+            duration: 400,
+            ease: "Power2",
+            onComplete: () => {
+              bridgeSprite.destroy();
+              this.vineBridgeSprites.delete(bridgeKey);
+              const [bx, by] = bridgeKey.split(",").map(Number);
+              if (this.grid[by]?.[bx]) {
+                this.grid[by][bx].type = "wall";
+                const wpx = this.offsetX + bx * TILE_SIZE + TILE_SIZE / 2;
+                const wpy = this.offsetY + by * TILE_SIZE + TILE_SIZE / 2;
+                const wallTexture = this.isJungleLevel() ? "jungle_wall" : this.isOceanLevel() ? "ocean_wall" : "wall";
+                this.add.image(wpx, wpy, wallTexture).setDisplaySize(TILE_SIZE, TILE_SIZE);
+              }
+            },
+          });
+        }
+      } else if (bridgeSprite) {
+        // Visual degradation: 5→full(0.9), 4→0.75, 3→0.6, 2→0.45, 1→0.3
+        const remaining = GameScene.MAX_BRIDGE_USES - uses;
+        const targetAlpha = 0.3 + (remaining / GameScene.MAX_BRIDGE_USES) * 0.6;
+        // Tint shifts from green-brown to red as it degrades
+        const tints = [0xffffff, 0xffddaa, 0xffbb66, 0xff8833, 0xff4444];
+        bridgeSprite.setTint(tints[uses - 1] ?? 0xff4444);
+        // Shake animation to show damage
         this.tweens.add({
           targets: bridgeSprite,
-          alpha: 0,
-          scaleY: 0,
-          duration: 400,
-          ease: "Power2",
+          x: bridgeSprite.x + 3,
+          duration: 50,
+          yoyo: true,
+          repeat: 3,
+          ease: "Sine.easeInOut",
           onComplete: () => {
-            bridgeSprite.destroy();
-            this.vineBridgeSprites.delete(bridgeKey);
-            const [bx, by] = bridgeKey.split(",").map(Number);
-            if (this.grid[by]?.[bx]) {
-              this.grid[by][bx].type = "wall";
-              const wpx = this.offsetX + bx * TILE_SIZE + TILE_SIZE / 2;
-              const wpy = this.offsetY + by * TILE_SIZE + TILE_SIZE / 2;
-              const wallTexture = this.isJungleLevel() ? "jungle_wall" : this.isOceanLevel() ? "ocean_wall" : "wall";
-              this.add.image(wpx, wpy, wallTexture).setDisplaySize(TILE_SIZE, TILE_SIZE);
-            }
+            bridgeSprite.setAlpha(targetAlpha);
           },
         });
       }
@@ -989,8 +1015,9 @@ export class GameScene extends Phaser.Scene {
     // Reveal fog in 1-tile radius
     this.revealFog(x, y);
 
-    // Check if standing on vine bridge — mark for collapse when leaving
-    if (this.vineBridgeSprites.has(cellKey) && !this.collapsedBridges.has(cellKey)) {
+    // Check if standing on vine bridge — mark for degradation when leaving
+    const bridgeUsed = this.vineBridgeUses.get(cellKey) ?? 0;
+    if (this.vineBridgeSprites.has(cellKey) && bridgeUsed < GameScene.MAX_BRIDGE_USES) {
       this.player.setData("onVineBridge", cellKey);
     }
 
