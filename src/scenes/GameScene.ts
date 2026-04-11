@@ -1545,14 +1545,19 @@ export class GameScene extends Phaser.Scene {
     const dy = to.y > cy ? 2 : to.y < cy ? -2 : 0;
 
     // Horizontal steps (maze grid uses odd coords, step by 2)
-    while (cx !== to.x) {
+    // Safety limit prevents infinite loop if parity mismatch occurs
+    const maxSteps = (this.levelData.gridWidth + this.levelData.gridHeight);
+    let safety = 0;
+    while (cx !== to.x && safety < maxSteps) {
       cx += dx;
       steps.push({ x: cx, y: cy });
+      safety++;
     }
     // Vertical steps
-    while (cy !== to.y) {
+    while (cy !== to.y && safety < maxSteps) {
       cy += dy;
       steps.push({ x: cx, y: cy });
+      safety++;
     }
 
     return steps;
@@ -1681,10 +1686,13 @@ export class GameScene extends Phaser.Scene {
       if (found) return found;
     }
 
-    // Otherwise find closest unoccupied walkable cell
+    // Otherwise find closest unoccupied walkable cell at odd coordinates
+    // (only odd,odd positions are true maze cells; even coords are passages
+    // and would break buildPatrolSteps which steps by 2)
     let best: Position | null = null;
     let bestDist = Infinity;
     for (const cell of walkable) {
+      if (cell.x % 2 === 0 || cell.y % 2 === 0) continue;
       const key = `${cell.x},${cell.y}`;
       if (occupied.has(key)) continue;
       const dist = Math.abs(cell.x - targetX) + Math.abs(cell.y - targetY);
